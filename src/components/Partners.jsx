@@ -4,12 +4,12 @@ const Partners = () => {
     // Utilisez des chemins d'accès relatifs à la racine de votre dossier public (ex: public/images/logo1.png)
     const partners = [
         // REMPLACEZ LES CHEMINS D'ACCÈS CI-DESSOUS par les noms de fichiers réels de VOS logos dans le dossier public
-        { name: 'AM', logo: '/cite_innovation.png' }, 
+        { name: 'AM', logo: '/enam.png' }, 
         { name: 'Domaines Zniber', logo: '/technopark.png' },
         { name: 'Providence Verti', logo: '/odc.png' },
         { name: 'MFRUITS', logo: '/technopark.png' },
         { name: 'ARIFRUIT', logo: '/cite_innovation.png' },
-        { name: 'M', logo: '/odc.png' },
+        { name: 'M', logo: '/enam.png' },
         { name: 'ASI', logo: '/technopark.png' },
     ];
 

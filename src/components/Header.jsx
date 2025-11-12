@@ -50,9 +50,6 @@ const Header = () => {
 
             {/* Actions */}
             <div className="header-actions">
-              <button className="search-btn">
-                <FaSearch />
-              </button>
               <button 
                 className="menu-toggle"
                 onClick={() => setMenuOpen(!menuOpen)}
