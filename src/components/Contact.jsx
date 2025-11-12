@@ -4,6 +4,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: ''
   });
 
@@ -19,61 +20,83 @@ const Contact = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     // Ajouter la logique d'envoi ici
+    setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
   return (
-    <section className="contact">
+    <section className="contact" id = "contact">
       <div className="container">
-        <h2>Contactez nous</h2>
-        
+        <div className="contact-header">
+          <h2 className="contact-title">
+            Contactez <span>nous</span>
+          </h2>
+          <p className="contact-description">
+            Remplissez le formulaire ci-dessous pour contacter notre équipe. Nous vous aiderons à 
+            trouver la solution agricole adaptée à vos besoins.
+          </p>
+        </div>
+
         <div className="contact-content">
+          {/* Form Section */}
           <div className="contact-form-wrapper">
             <form className="contact-form" onSubmit={handleSubmit}>
-              <div className="form-group">
+              <div className="form-row">
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Nom Complet *"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Adresse Email *"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group full-width">
                 <input
                   type="text"
-                  name="name"
-                  placeholder="Votre nom"
-                  value={formData.name}
+                  name="subject"
+                  placeholder="Sujet"
+                  value={formData.subject}
                   onChange={handleChange}
-                  required
                 />
               </div>
 
-              <div className="form-group">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Votre email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
+              <div className="form-group full-width">
                 <textarea
                   name="message"
-                  placeholder="Votre message"
+                  placeholder="Message (Optionnel)"
                   value={formData.message}
                   onChange={handleChange}
-                  rows="5"
-                  required
+                  rows="6"
                 ></textarea>
               </div>
 
-              <button type="submit" className="cta-button-primary">
-                Envoyer le message
+              <button type="submit" className="contact-submit-btn">
+                Envoyer la demande
               </button>
             </form>
           </div>
 
-          <div className="contact-map">
+          {/* Map Section */}
+          <div className="contact-map-wrapper">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.1841546136446!2d-74.00601592346869!3d40.71282313111155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQwLjIiTiA3NMKwMDAnMTUuNiJX!5e0!3m2!1sfr!2sfr!4v1234567890"
+              src="https://maps.google.com/maps?q=Cité+d'Innovation+d'Agadir&t=&z=15&ie=UTF8&iwloc=&output=embed"
               width="100%"
-              height="400"
-              style={{ border: 0 }}
+              height="100%"
+              style={{ border: 0, borderRadius: '8px' }}
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

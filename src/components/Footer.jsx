@@ -1,59 +1,106 @@
-import React from 'react';
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { FaFacebook, FaTwitter, FaPinterest, FaInstagram, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    console.log('Newsletter signup:', email);
+    setEmail('');
+  };
+
   return (
     <footer className="footer">
-      <div className="footer-content">
-        <div className="container">
-          <div className="footer-grid">
-            <div className="footer-section">
-              <h3>Greenman</h3>
-              <p>Cultivating a sustainable future for agriculture and the planet.</p>
-              <div className="social-icons">
-                <a href="#"><FaFacebook /></a>
-                <a href="#"><FaTwitter /></a>
-                <a href="#"><FaLinkedin /></a>
-                <a href="#"><FaInstagram /></a>
+      <div className="container">
+        <div className="footer-content">
+          {/* Left Section */}
+          <div className="footer-section footer-left">
+          <div className="footer-logo">
+              <img src="/Logo-h-white.png" alt="Logo GrennerTech" />
+          </div>
+            <p className="footer-description">
+              There are many variations of passages of lorem ipsum available, but the majority suffered.
+            </p>
+            <div className="footer-social">
+              <a href="#" className="social-link"><FaTwitter /></a>
+              <a href="#" className="social-link"><FaFacebook /></a>
+              <a href="#" className="social-link"><FaPinterest /></a>
+              <a href="#" className="social-link"><FaInstagram /></a>
+            </div>
+          </div>
+
+          {/* Explore Column */}
+          <div className="footer-section">
+            <h4 className="footer-section-title">Explore</h4>
+            <ul className="footer-links">
+              <li><a href="#about">About</a></li>
+              <li><a href="#services">Our Services</a></li>
+              <li><a href="#blogs">Our Blogs</a></li>
+              <li><a href="#partners">Our Partners</a></li>
+              <li><a href="#contact">Contact US</a></li>
+            </ul>
+          </div>
+
+          {/* News Column */}
+          <div className="footer-section">
+            <h4 className="footer-section-title">News</h4>
+            <div className="footer-news">
+              <div className="news-item">
+                <h5>Bringing Food Production Back To Cities</h5>
+                <span className="news-date">July 5, 2022</span>
+              </div>
+              <div className="news-item">
+                <h5>The Future of Farming, Smart Irrigation Solutions</h5>
+                <span className="news-date">July 5, 2022</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Column */}
+          <div className="footer-section">
+            <h4 className="footer-section-title">Contact</h4>
+            <div className="footer-contact-info">
+              <div className="contact-item">
+                <FaPhone className="contact-icon" />
+                <span>+66 888 0000</span>
+              </div>
+              <div className="contact-item">
+                <FaEnvelope className="contact-icon" />
+                <span>hello@panycompany.com</span>
+              </div>
+              <div className="contact-item">
+                <FaMapMarkerAlt className="contact-icon" />
+                <span>90 brooklyn golden street line New york, USA</span>
               </div>
             </div>
 
-            <div className="footer-section">
-              <h4>Entreprise</h4>
-              <ul>
-                <li><a href="#">À propos</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Blog</a></li>
-                <li><a href="#">Carrières</a></li>
-              </ul>
-            </div>
-
-            <div className="footer-section">
-              <h4>Produits</h4>
-              <ul>
-                <li><a href="#">Solutions agricoles</a></li>
-                <li><a href="#">Consulting</a></li>
-                <li><a href="#">Formation</a></li>
-                <li><a href="#">Support</a></li>
-              </ul>
-            </div>
-
-            <div className="footer-section">
-              <h4>Contact</h4>
-              <p>Email: info@greenman.com</p>
-              <p>Tél: +33 1 23 45 67 89</p>
-              <p>Adresse: 123 rue de l'Agriculture<br/>75000 Paris, France</p>
-            </div>
+            <form className="footer-newsletter" onSubmit={handleNewsletterSubmit}>
+              <input
+                type="email"
+                placeholder="Your Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit">
+                <FaEnvelope />
+              </button>
+            </form>
           </div>
         </div>
       </div>
 
+      {/* Footer Bottom */}
       <div className="footer-bottom">
         <div className="container">
-          <p>&copy; 2024 Greenman. Tous droits réservés.</p>
-          <div className="footer-links">
-            <a href="#">Politique de confidentialité</a>
-            <a href="#">Conditions d'utilisation</a>
+          <div className="footer-bottom-content">
+            <p>&copy; All Copyright 2024 by GrennerTech</p>
+            <div className="footer-bottom-links">
+              <a href="#terms">Terms of Use</a>
+              <span>|</span>
+              <a href="#privacy">Privacy Policy</a>
+            </div>
           </div>
         </div>
       </div>

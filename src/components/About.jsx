@@ -9,7 +9,7 @@ const About = () => {
   ];
 
   return (
-    <section className="about">
+    <section className="about" id = "about">
       <div className="container">
         <div className="about-content">
           {/* Image Section */}
