@@ -15,7 +15,7 @@ const About = () => {
           {/* Image Section */}
           <div className="about-image-wrapper">
             <img 
-              src="/about-gt.png" 
+              src="/CONCEPT 2.png" 
               alt="Agriculture"
               className="about-image"
             />

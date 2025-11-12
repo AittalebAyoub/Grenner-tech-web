@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
 
 const Services = () => {
@@ -24,7 +25,7 @@ const Services = () => {
   ];
 
   return (
-    <section className="services" id = "solutions">
+    <section className="services">
       <div className="container">
         <div className="services-header">
           <span className="services-label">Nos solutions</span>
@@ -33,22 +34,24 @@ const Services = () => {
 
         <div className="services-grid">
           {services.map(service => (
-            <div key={service.id} className="service-card">
-              <div className="service-image">
-                <img src={service.image} alt={service.title} />
-              </div>
-              
-              <div className="service-body">
-                <h3 className="service-title">
-                  {service.title}
-                  <FaArrowRight className="service-arrow" />
-                </h3>
+            <Link key={service.id} to={`/service/${service.id}`} className="service-card-link">
+              <div className="service-card">
+                <div className="service-image">
+                  <img src={service.image} alt={service.title} />
+                </div>
                 
-                <p className="service-description">
-                  {service.description}
-                </p>
+                <div className="service-body">
+                  <h3 className="service-title">
+                    {service.title}
+                    <FaArrowRight className="service-arrow" />
+                  </h3>
+                  
+                  <p className="service-description">
+                    {service.description}
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
