@@ -743,6 +743,16 @@ body {
   box-shadow: 0 6px 16px rgba(46, 204, 113, 0.3);
 }
 
+.blog-card-link {
+    text-decoration: none; /* Supprime le soulignement */
+    color: inherit;       /* S'assure que la couleur du texte est héritée et non le bleu par défaut */
+}
+
+/* 2. Lien "Voir tous les articles" dans le pied de page (Bien que le style le masque déjà) */
+.blog-view-all {
+    text-decoration: none; /* Supprime le soulignement */
+}
+
 /* ===== CONTACT SECTION ===== */
 .contact {
   padding: 100px 0;
@@ -1827,6 +1837,7 @@ body {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+
 }
 
 .blog-detail-image img {

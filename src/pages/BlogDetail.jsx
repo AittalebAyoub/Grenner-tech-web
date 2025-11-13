@@ -1,99 +1,132 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { FaCalendar, FaUser, FaClock } from 'react-icons/fa';
+import { FaUser, FaClock } from 'react-icons/fa';
 import Header from '../components/Header';
 import Partners from '../components/Partners';
 import Footer from '../components/Footer';
-import BlogHero from '../components/BlogHero';
+
 const BlogDetail = () => {
   const { id } = useParams();
+  const [blog, setBlog] = useState(null);
+  const [recentBlogs, setRecentBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Données dynamiques des blogs
-  const blogsData = {
-    1: {
-      title: 'The Future of Farming, Smart Irrigation Solutions',
-      image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=800&h=400&fit=crop',
-      date: '05 July 2022',
-      author: 'Kevin Martin',
-      readTime: '5 min de lecture',
-      content: `Lorem ipsum dolor sit amet, cibo mundei vel dub, vim exerci phaerum. There are many variations of passages of Lorem ipsum available, but the majority have alteration in some injected humor or words which don't look even slightly believable. If you are going to use a passage of Lorem ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem ipsum which looks reasonable.
+  const API_BASE_URL = process.env.REACT_APP_STRAPI_API_URL;
 
-Lorem ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type simen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+  useEffect(() => {
+    const fetchBlogData = async () => {
+      try {
+        setLoading(true);
 
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
-Lorem ipsum is simply dummy text of the printing and typesetting industry, orem ipsum has been the industry's standard dummy text ever since the when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting.
+        // Récupérer le blog détail
+        const blogResponse = await fetch(`${API_BASE_URL}/blogs/${id}?populate=*`);
+        if (!blogResponse.ok) throw new Error('Blog non trouvé');
+        const blogData = await blogResponse.json();
+        setBlog(blogData.data);
 
-`
-    },
-    2: {
-      title: 'Bringing Food Production Back To Cities',
-      image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad576?w=800&h=400&fit=crop',
-      date: '12 July 2022',
-      author: 'Sarah Johnson',
-      readTime: '6 min de lecture',
-      content: `Urban agriculture is transforming cities around the world. By bringing food production back to cities, we can reduce transportation costs, support local economies, and create fresher food for consumers.
+        // Récupérer tous les blogs pour la sidebar
+        const blogsResponse = await fetch(`${API_BASE_URL}/blogs?populate=*&pagination[pageSize]=3`);
+        if (!blogsResponse.ok) throw new Error('Erreur lors du chargement des blogs');
+        const blogsData = await blogsResponse.json();
+        setRecentBlogs(blogsData.data || []);
+      } catch (err) {
+        console.error('Error fetching blog:', err);
+        setError('Erreur lors du chargement du blog');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-The benefits of urban farming are numerous. First, it reduces the carbon footprint associated with food transportation. Second, it provides employment opportunities for local communities. Third, it educates consumers about where their food comes from.
-
-This article explores the latest innovations in urban farming, from rooftop gardens to vertical farms, and how they're reshaping our relationship with food.`
-    },
-    3: {
-      title: 'Agronomy and Relation to Other Sciences',
-      image: 'https://images.unsplash.com/photo-1500382017468-f049863256f0?w=800&h=400&fit=crop',
-      date: '18 July 2022',
-      author: 'John Doe',
-      readTime: '7 min de lecture',
-      content: `Agronomy is a science that brings together elements of biology, chemistry, physics, and ecology. Understanding how these disciplines interact is crucial for modern agriculture.
-
-The integration of data science and machine learning into agronomy is revolutionizing farming practices. Farmers can now use predictive analytics to optimize crop yields, reduce water usage, and minimize pesticide application.
-
-This comprehensive guide explains how agronomy connects to other scientific disciplines and how this interdisciplinary approach is shaping the future of sustainable agriculture.`
+    if (id && API_BASE_URL) {
+      fetchBlogData();
     }
+  }, [id, API_BASE_URL]);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div style={{ padding: '100px 0', textAlign: 'center' }}>
+          <p>Chargement...</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <div style={{ padding: '100px 0', textAlign: 'center' }}>
+          <p>{error}</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  if (!blog) {
+    return (
+      <>
+        <Header />
+        <div style={{ padding: '100px 0', textAlign: 'center' }}>
+          <p>Blog non trouvé</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+    // 1. image_coverture est un ARRAY, nous prenons le premier élément (l'objet image)
+    const imageObject = blog.image_coverture && blog.image_coverture[0]; 
+                            
+    // 2. Nous accédons directement à l'URL de l'objet image
+    const imageUrl = imageObject?.url || '/placeholder.jpg';
+
+   // 3. Si l'URL est relative, on ajoute l'API_BASE_URL (mais ici, elle est absolue)
+   const finalImageUrl = imageUrl.startsWith('http') ? imageUrl : `${API_BASE_URL}${imageUrl}`;
+
+  // Formater la date
+  const formattedDate = new Date(blog.date_publication).toLocaleDateString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  // Récupérer le contenu du blog
+  const getContentText = () => {
+    if (!blog.content || blog.content.length === 0) return '';
+
+    let fullText = '';
+    blog.content.forEach(block => {
+      if (block.__component === 'bloc.paragraphe-riche') {
+        // Extraire le texte des paragraphes riches
+        if (Array.isArray(block.texte)) {
+          block.texte.forEach(para => {
+            if (para.children) {
+              para.children.forEach(child => {
+                if (child.text) {
+                  fullText += child.text + '\n';
+                }
+              });
+            }
+          });
+        }
+      } else if (block.__component === 'bloc.citation') {
+        fullText += `\n"${block.texte_citation}"\n— ${block.source}\n`;
+      }
+    });
+    return fullText;
   };
 
-  const blog = blogsData[id] || blogsData[1];
-
-  // Récents articles (sidebar)
-  const recentPosts = [
-    {
-      id: 1,
-      title: 'Bringing Food Production Back To Cities',
-      author: 'Kevin Martin',
-      image: '/malade.png'
-    },
-    {
-      id: 2,
-      title: 'The Future of Farming, Smart Irrigation Solutions',
-      author: 'Kevin Martin',
-      image: '/sol.png'
-    },
-    {
-      id: 3,
-      title: 'Agronomy and relation to Other Sciences',
-      author: 'Kevin Martin',
-      image: '/recolte.jpg'
-    }
-  ];
+  const contentText = getContentText();
 
   return (
     <div className="blog-detail-page">
       <Header />
-  
+
       {/* Blog Content */}
       <section className="blog-detail-content">
         <div className="container">
@@ -102,26 +135,26 @@ This comprehensive guide explains how agronomy connects to other scientific disc
             <div className="blog-detail-main">
               {/* Image */}
               <div className="blog-detail-image">
-                <img src={blog.image} alt={blog.title} />
-                <span className="blog-detail-date">{blog.date}</span>
+                <img src={finalImageUrl} alt={blog.titre} />
+                <span className="blog-detail-date">{formattedDate}</span>
               </div>
 
               {/* Title */}
-              <h1 className="blog-detail-title">{blog.title}</h1>
+              <h1 className="blog-detail-title">{blog.titre}</h1>
 
               {/* Meta Info */}
               <div className="blog-detail-meta">
                 <span className="meta-item">
-                  <FaUser /> {blog.author}
+                  <FaUser /> {blog.auteur}
                 </span>
                 <span className="meta-item">
-                  <FaClock /> {blog.readTime}
+                  <FaClock /> {blog.temps_lecture} min de lecture
                 </span>
               </div>
 
               {/* Content */}
               <div className="blog-detail-body">
-                {blog.content.split('\n\n').map((paragraph, index) => (
+                {contentText.split('\n\n').map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}
               </div>
@@ -131,14 +164,21 @@ This comprehensive guide explains how agronomy connects to other scientific disc
             <div className="blog-detail-sidebar">
               <h3 className="sidebar-title">Latest Posts</h3>
               <div className="latest-posts">
-                {recentPosts.map((post) => (
-                  <div key={post.id} className="latest-post-item">
-                    <img src={post.image} alt={post.title} />
+                {recentBlogs.map((post) => (
+
+                  <div key={post.documentId} className="latest-post-item">
+                    <img 
+                      src={post.image_coverture?.url 
+                        ? `${API_BASE_URL.replace('/api', '')}${post.image_coverture.url}`
+                        : 'https://via.placeholder.com/150x150'
+                      } 
+                      alt={post.titre} 
+                    />
                     <div className="latest-post-content">
                       <span className="latest-post-author">
-                        <FaUser /> by {post.author}
+                        <FaUser /> by {post.auteur}
                       </span>
-                      <h4 className="latest-post-title">{post.title}</h4>
+                      <h4 className="latest-post-title">{post.titre}</h4>
                     </div>
                   </div>
                 ))}
@@ -147,6 +187,7 @@ This comprehensive guide explains how agronomy connects to other scientific disc
           </div>
         </div>
       </section>
+
       <Partners />
       <Footer />
     </div>
