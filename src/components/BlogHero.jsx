@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaChevronRight } from 'react-icons/fa';
 
-const ServiceHero = ({ title="Agriculture Products", breadcrumbLabel = "NOS SOLUTIONS" }) => {
+const ServiceHero = ({ title="The Future of Farming, Smart Irrigation Solutions", breadcrumbLabel = "NOS BLOGS" }) => {
   return (
     <section className="service-hero">
       <div className="service-hero-overlay"></div>

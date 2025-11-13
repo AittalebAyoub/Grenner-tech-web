@@ -9,6 +9,7 @@ import Articles from './components/Articles';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ServiceDetail from './pages/ServiceDetail';
+import BlogDetail from './pages/BlogDetail';
 import './styles/App.css';
 
 function App() {
@@ -34,6 +35,9 @@ function App() {
         
         {/* Service Detail Page */}
         <Route path="/service/:id" element={<ServiceDetail />} />
+
+        {/* Blog Detail Page */}
+        <Route path="/blog/:id" element={<BlogDetail />} />
       </Routes>
     </Router>
   );

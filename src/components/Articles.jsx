@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FaUser, FaClock, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Blog = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const articles = [
+ const articles = [
     {
       id: 1,
       title: 'Bringing Food Production Back To Cities',
@@ -47,6 +48,7 @@ const Blog = () => {
     }
   ];
 
+
   const itemsPerPage = 3;
   const totalPages = Math.ceil(articles.length / itemsPerPage);
 
@@ -64,7 +66,7 @@ const Blog = () => {
   };
 
   return (
-    <section className="blog" id = "blogs">
+    <section className="blog">
       <div className="container">
         <div className="blog-header">
           <span className="blog-label">Nos blogs</span>
@@ -78,25 +80,31 @@ const Blog = () => {
 
           <div className="blog-grid">
             {visibleArticles.map((article) => (
-              <div key={article.id} className="blog-card">
-                <div className="blog-image-wrapper">
-                  <img src={article.image} alt={article.title} />
-                  <span className="blog-date-badge">{article.date}</span>
-                </div>
-
-                <div className="blog-card-content">
-                  <div className="blog-meta">
-                    <span className="blog-author">
-                      <FaUser /> {article.author}
-                    </span>
-                    <span className="blog-read-time">
-                      <FaClock /> {article.readTime}
-                    </span>
+              <Link 
+                key={article.id} 
+                to={`/blog/${article.id}`} 
+                className="blog-card-link"
+              >
+                <div className="blog-card">
+                  <div className="blog-image-wrapper">
+                    <img src={article.image} alt={article.title} />
+                    <span className="blog-date-badge">{article.date}</span>
                   </div>
 
-                  <h3 className="blog-article-title">{article.title}</h3>
+                  <div className="blog-card-content">
+                    <div className="blog-meta">
+                      <span className="blog-author">
+                        <FaUser /> {article.author}
+                      </span>
+                      <span className="blog-read-time">
+                        <FaClock /> {article.readTime}
+                      </span>
+                    </div>
+
+                    <h3 className="blog-article-title">{article.title}</h3>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
