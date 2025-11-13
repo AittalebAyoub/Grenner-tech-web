@@ -494,6 +494,18 @@ body {
   height: 100%;
 }
 
+.service-card-link {
+    /* Propriété essentielle pour enlever le soulignement par défaut */
+    text-decoration: none; 
+    
+    /* Assurez-vous que le texte hérite de la couleur voulue, car le lien (<a>) 
+       a souvent une couleur par défaut qui n'est pas noire. */
+    color: inherit; 
+
+    /* Rendre la carte cliquable sur toute sa surface */
+    display: block; 
+}
+
 .service-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
@@ -1439,7 +1451,12 @@ body {
   flex-direction: column;
   gap: 1rem;
 }
-
+.service-content-right .stats-title {
+  font-size: 1.2rem;
+  font-family: 'Covered By Your Grace';
+  text-align: center;
+  font-weight: 500;
+}
 .service-stats {
   display: flex;
   flex-direction: column;
@@ -1512,7 +1529,6 @@ body {
   gap: 1.5rem;
   width: 80%;
   padding-top: 3rem;
-  margin-top: 2rem;
   border-top: 1px solid #e0e0e0;
 }
 
@@ -1547,7 +1563,7 @@ body {
   font-size: 0.85rem;
   color: var(--text-light);
   line-height: 1.6;
-  margin: 0;
+  margin-bottom: 20px;
 }
 
 @media (max-width: 1024px) {
@@ -1997,4 +2013,47 @@ body {
   .latest-post-title {
     font-size: 0.85rem;
   }
+}
+
+/* --- Espacement général entre les blocs de contenu --- */
+/* Applique une marge en bas pour séparer les paragraphes, titres et listes */
+.rich-text-content p,
+.rich-text-content h2,
+.rich-text-content h3,
+.rich-text-content ul,
+.rich-text-content ol {
+    margin-bottom: 1.5rem; /* Ajustez cette valeur selon vos besoins (ex: 24px) */
+    line-height: 1.6;
+}
+
+/* --- Espacement spécifique pour les titres pour une meilleure hiérarchie --- */
+.rich-text-heading {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+.rich-text-h2 {
+    font-size: 2em;
+}
+.rich-text-h3 {
+    font-size: 1.5em;
+}
+
+/* --- Indentation des Listes (Padding Left) --- */
+.rich-text-list {
+    /* Retire la marge par défaut souvent excessive */
+    margin-top: 0;
+    margin-bottom: 1.5rem; 
+    /* Définit le padding-left pour l'indentation des puces ou des numéros */
+    padding-left: 2rem; /* Valeur standard, ajustez si nécessaire */
+}
+
+/* Optionnel : Assurez-vous que les éléments de liste eux-mêmes ont un petit espacement */
+.rich-text-list li {
+    margin-bottom: 0.5rem;
+}
+
+/* Optionnel : Style des liens (pour les rendre plus visibles) */
+.rich-text-link {
+    color: #007bff; /* Couleur de lien typique */
+    text-decoration: underline;
 }
