@@ -6,6 +6,7 @@ import { FaUser, FaClock, FaQuoteLeft, FaChevronRight } from 'react-icons/fa';
 import Header from '../components/Header';
 import Partners from '../components/Partners';
 import Footer from '../components/Footer';
+import BlogHero from '../components/BlogHero';
 
 // ==================================================================================
 // === FONCTIONS UTILITAIRES DE RENDU (Rich Text & Images) ==========================
@@ -238,7 +239,7 @@ const BlogDetail = () => {
     return (
         <div className="blog-detail-page">
             <Header />
-
+            <BlogHero blogData={blog} /> 
             {/* Blog Content */}
             <section className="blog-detail-content">
                 <div className="container">

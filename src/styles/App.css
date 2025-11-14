@@ -1262,7 +1262,7 @@ body {
 /* Ajustements Responsifs (si nécessaire) */
 
 /* ===== SERVICE HERO SECTION ===== */
-.service-hero {
+.service-hero , .blog-hero{
   position: relative;
   min-height: 250px;
   display: flex;
@@ -1274,7 +1274,7 @@ body {
   overflow: hidden;
 }
 
-.service-hero-overlay {
+.service-hero-overlay ,.blog-hero-overlay{
   position: absolute;
   top: 0;
   left: 0;
@@ -1284,7 +1284,7 @@ body {
   z-index: 1;
 }
 
-.service-hero-content {
+.service-hero-content ,.blog-hero-content{
   position: relative;
   z-index: 2;
   text-align: center;
@@ -1293,7 +1293,7 @@ body {
   padding: 0 20px;
 }
 
-.service-breadcrumb {
+.service-breadcrumb ,.blog-breadcrumb{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1303,17 +1303,17 @@ body {
   opacity: 0.9;
 }
 
-.service-breadcrumb a {
+.service-breadcrumb a , .blog-breadcrumb a {
   color: var(--white);
   text-decoration: none;
   transition: opacity 0.3s ease;
 }
 
-.service-breadcrumb a:hover {
+.service-breadcrumb a:hover  , .blog-breadcrumb a:hover{
   opacity: 0.7;
 }
 
-.service-breadcrumb span {
+.service-breadcrumb span , .blog-breadcrumb span{
   color: var(--white);
 }
 
@@ -1322,7 +1322,7 @@ body {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.service-hero-title {
+.service-hero-title , .blog-hero-title {
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--white);
@@ -1332,26 +1332,26 @@ body {
 }
 
 @media (max-width: 1024px) {
-  .service-hero {
+  .service-hero , .blog-hero{
     min-height: 350px;
   }
 
-  .service-hero-title {
+  .service-hero-title , .blog-hero-title {
     font-size: 2.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .service-hero {
+  .service-hero , .blog-hero{
     min-height: 300px;
     padding: 40px 0;
   }
 
-  .service-hero-title {
+  .service-hero-title , .blog-hero-title {
     font-size: 2rem;
   }
 
-  .service-breadcrumb {
+  .service-breadcrumb , .blog-breadcrumb{
     font-size: 0.85rem;
     margin-bottom: 1.5rem;
   }
