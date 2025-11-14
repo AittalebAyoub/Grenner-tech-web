@@ -3,13 +3,13 @@
 /* ========================================================================= */
 .chat-window {
     position: fixed;
-    bottom: 80px; /* Au-dessus du bouton de bascule */
+    bottom: 80px; 
     right: 20px;
-    width: 300px;
-    height: 450px;
-    background-color: white;
-    border-radius: 10px; /* Coins arrondis pour la fenêtre */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    width: 320px; /* Légèrement plus large pour l'esthétique */
+    height: 480px; /* Légèrement plus haut */
+    background-color: #f7f7f7; /* Fond du chat plus clair */
+    border-radius: 12px; 
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -22,14 +22,14 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     border-radius: 50%;
-    background-color: #4CAF50; /* Vert dominant */
+    background-color: #4CAF50; /* Vert GrennerTech */
     color: white;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -41,7 +41,6 @@
     background-color: #45a049;
 }
 
-/* Style de l'icône de bascule (contient l'image SVG/PNG) */
 .chat-toggle-btn .toggle-icon {
     display: flex; 
     align-items: center;
@@ -50,39 +49,38 @@
     height: 100%;
 }
 .chat-toggle-btn .toggle-icon img {
-    width: 24px; 
-    height: 24px;
-  
+    width: 26px; 
+    height: 26px;
+    
 }
 
 /* ========================================================================= */
 /* --- Styles de l'En-tête (Header) --- */
 /* ========================================================================= */
 .chat-header {
-    background-color: #4CAF50; /* Vert dominant */
+    background-color: #4CAF50; 
     color: white;
-    padding: 12px 15px;
+    padding: 15px;
     font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
 .chat-header-content {
     display: flex;
     align-items: center;
+    font-size: 1.1em;
 }
 
-/* Style pour l'image d'icône/logo dans l'en-tête */
 .chat-header-icon-img {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%; 
+    width: 28px;
+    height: 28px;
     margin-right: 10px;
-    /* Si l'image est un logo vert, laissez-le tel quel */
-    /* Si besoin de le styliser, utilisez des filtres ici */
+    /* Assurez-vous que l'icône est blanche si le fond est vert */
+    filter: brightness(0) invert(1);
 }
 
 /* ========================================================================= */
@@ -92,102 +90,86 @@
     flex-grow: 1;
     padding: 15px;
     overflow-y: auto;
-    background-color: #f0f0f0; /* Gris clair pour le fond */
-    /* Petite astuce pour cacher la barre de défilement sur certains navigateurs */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    background-color: #f7f7f7; /* Fond du corps */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 .chat-body::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
 }
 
-/* Conteneur de chaque ligne de message (pour l'alignement avec avatar) */
 .message-row {
     display: flex;
-    align-items: flex-end; /* Aligner les avatars et les bulles */
-    margin-bottom: 10px;
+    align-items: flex-start; /* Alignement au début de la bulle */
+    margin-bottom: 15px;
 }
 
 .message-row.self {
-    justify-content: flex-end; /* Mes messages à droite */
+    justify-content: flex-end; 
 }
 
 .message-row.other {
-    justify-content: flex-start; /* Messages de l'autre à gauche */
+    justify-content: flex-start; 
 }
 
 /* Avatars */
 .avatar {
-    width: 30px;
-    height: 30px;
+    width: 25px; 
+    height: 25px;
     border-radius: 50%;
-    margin: 0 8px;
-    background-color: #ccc; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    /* Autres styles conservés */
+    margin: 0 10px; 
+    
     flex-shrink: 0; 
+    overflow: hidden; 
 }
 
-.bot-avatar {
-    background-color: #F8F8F8; /* Couleur de fond pour l'avatar bot */
+.avatar img {
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    display: block; 
 }
 
-
-.user-avatar {
-    background-color: #F8F8F8; /* Couleur de fond pour l'avatar utilisateur */
-}
-
-
-
-/* Bulles de message */
+/* -------------------- Bulles de Message AMÉLIORÉES -------------------- */
 .message-bubble {
-    padding: 10px 15px;
-    border-radius: 18px; /* Coins très arrondis */
-    max-width: 70%; 
+    padding: 10px 14px;
+    width: 75%;
     position: relative;
-    word-wrap: break-word; 
-    font-size: 0.9em;
+    word-wrap: break-word;
+    font-size: 0.95em;
+    line-height: 1.4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-top: 2px; /* Pour aligner avec le haut de l'avatar */
 }
 
-/* Message du 'Bot' (Other) */
+/* --- Message de l'Agent (Bot / Other) --- */
 .message-bubble.other {
-    background-color: #e6e6e6; /* Gris clair */
+    background-color: #ffffff; 
     color: #333;
-    margin-left: 5px; 
-}
-/* Triangle de la bulle 'other' */
-.message-bubble.other::before {
-    content: '';
-    position: absolute;
-    left: -7px; 
-    bottom: 0px; 
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-right: 10px solid #e6e6e6; /* Doit correspondre à la couleur de la bulle */
-    border-bottom: 10px solid transparent;
+    /* Arrondis asymétriques: Moins arrondi près de l'avatar */
+    border-top-left-radius: 6px; 
+    border-top-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
 }
 
 
-/* Message de l'Utilisateur (Self) */
+
+/* --- Message de l'Utilisateur (Self) --- */
 .message-bubble.self {
-    background-color: #333; /* Gris foncé, comme sur l'image */
+    background-color: #333; 
     color: white;
-    margin-right: 5px;
+    /* Arrondis asymétriques: Moins arrondi près de l'avatar */
+    border-top-left-radius: 18px;
+    border-top-right-radius: 6px; 
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
 }
-/* Triangle de la bulle 'self' */
-.message-bubble.self::before {
-    content: '';
-    position: absolute;
-    right: -7px; 
-    bottom: 0px; 
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-left: 10px solid #333; /* Doit correspondre à la couleur de la bulle */
-    border-bottom: 10px solid transparent;
-}
+
 
 /* Infos (heure, statut) */
 .message-info {
@@ -199,7 +181,7 @@
     align-items: center;
     gap: 4px;
 }
-
+/* Styles de couleur pour l'heure/statut */
 .message-bubble.self .message-info {
     color: rgba(255, 255, 255, 0.8);
 }
@@ -209,13 +191,39 @@
 
 .check-icon {
     font-size: 0.9em;
-    color: #a0a0a0;
-}
-.message-bubble.self .check-icon {
-    color: #a0a0a0;
+    color: #4CAF50; /* Vert pour la confirmation de lecture */
 }
 
+/* --- Bouton Audio dans la bulle de message --- */
+.audio-play-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 8px; /* Plus d'espace après l'heure */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
 
+.audio-play-btn img {
+    width: 100%;
+    height: 100%;
+}
+.audio-play-btn:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+/* Style pour indiquer que l'audio est en cours de lecture */
+.audio-play-btn.is-active {
+    opacity: 1;
+    color: #4CAF50; 
+}
 /* ========================================================================= */
 /* --- Styles de la Zone de Saisie (Input Area) --- */
 /* ========================================================================= */
@@ -225,21 +233,32 @@
     display: flex;
     align-items: center;
     background-color: #fff;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
 }
 
 .chat-input-area input {
     flex-grow: 1;
     padding: 10px 15px;
     border: 1px solid #ddd;
-    border-radius: 20px; /* Champ très arrondi */
+    border-radius: 20px; 
     margin-right: 10px;
     font-size: 0.9em;
     outline: none;
+    transition: border-color 0.2s ease;
 }
 
-/* Conteneur d'icônes (mic/send) */
+.chat-input-area input:focus {
+    border-color: #4CAF50;
+}
+
+.chat-input-area input:disabled {
+    background-color: #f7f7f7;
+    cursor: not-allowed;
+    color: #888;
+}
+
+/* Conteneur d'icônes (mic/send/loading) */
 .input-icon {
     width: 38px; 
     height: 38px;
@@ -252,52 +271,61 @@
     flex-shrink: 0;
 }
 
-/* Assure que l'image à l'intérieur est bien dimensionnée */
 .input-icon img {
     width: 25px; 
     height: 25px;
 }
 
-/* Icône Micro (Champ vide) - Pas de fond visible */
+/* Icône Micro (Champ vide) */
 .input-icon.mic {
     background-color: transparent; 
+    /* Utilisation de la couleur verte pour l'icône micro */
 }
 .input-icon.mic img {
-    /* Le micro dans votre image est vert */
-    /* Si l'image source est noire, utilisez un filtre pour la rendre verte */
-    /* filter: sepia(100%) saturate(300%) hue-rotate(90deg) brightness(70%); */
+    filter: invert(30%) sepia(80%) saturate(700%) hue-rotate(80deg) brightness(90%); /* Vert foncé */
     width: 22px; 
     height: 22px;
 }
 
-/* Icône Envoyer (Champ plein) - Fond vert */
+/* Icône Envoyer (Champ plein) */
 .input-icon.send {
-    background-color: #4CAF50; /* Vert */
+    background-color: #4CAF50; 
 }
 .input-icon.send img {
-    /* L'icône d'envoi doit être blanche sur le fond vert */
-
+  
     margin-left: 2px; 
 }
 
-.input-icon:hover {
-    filter: brightness(0.9);
+/* Icône Chargement (Spinner) */
+.input-icon.loading {
+    background-color: #4CAF50; 
 }
 
-/* ... (Tous les styles précédents restent inchangés) ... */
+/* -------------------- Animations -------------------- */
 
-/* ========================================================================= */
-/* --- Styles des Indicateurs de Chargement (Typing/Loading) --- */
-/* ========================================================================= */
+/* 1. Spinner (Input Area) */
+.spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
 
-/* 1. Indicateur "Typing" dans le corps du chat */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 2. Indicateur "Typing" (Chat Body) */
 .typing-indicator .message-bubble {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #e6e6e6 !important;
+    background-color: #ffffff !important;
     padding: 8px 15px;
-    width: 50px; /* Taille réduite pour les points */
+    width: 50px; 
 }
 
 /* Animation des points (Dot Typing) */
@@ -309,7 +337,7 @@
     border-radius: 50%;
     background-color: #333;
     color: #333;
-    box-shadow: 9999px 0 0 -5px, 10008px 0 0 -5px, 10017px 0 0 -5px; /* Initialisation des 3 points */
+    box-shadow: 9999px 0 0 -5px, 10008px 0 0 -5px, 10017px 0 0 -5px;
     animation: dotTyping 1.5s infinite ease-in-out;
 }
 
@@ -337,63 +365,70 @@
     }
 }
 
-/* 2. Icône de chargement (Spinner) dans le champ de saisie */
-.input-icon.loading {
-    background-color: #4CAF50; 
+/* ========================================================================= */
+/* --- Styles pour le contenu Markdown (à l'intérieur de .message-bubble) --- */
+/* ========================================================================= */
+
+.message-bubble p {
+    /* Assurez-vous que les paragraphes n'ont pas de marge excessive */
+    margin-top: 0;
+    margin-bottom: 0.5em; 
 }
 
-.spinner {
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top: 3px solid #fff;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
+/* Titres */
+.message-bubble h1,
+.message-bubble h2,
+.message-bubble h3 {
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    line-height: 1.2;
+}
+.message-bubble h2 {
+    font-size: 1.1em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 3px;
+}
+.message-bubble h3 {
+    font-size: 1em;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Listes */
+.message-bubble ul,
+.message-bubble ol {
+    padding-left: 20px;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+.message-bubble li {
+    margin-bottom: 5px;
 }
 
-/* Mise à jour pour le champ de saisie désactivé */
-.chat-input-area input:disabled {
-    background-color: #f7f7f7;
-    cursor: not-allowed;
-    color: #888;
+/* Code en ligne */
+.message-bubble code {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.85em;
 }
 
-
-.input-icon {
- 
-    margin-left: 5px; 
+/* Citations (Blockquotes) */
+.message-bubble blockquote {
+    border-left: 3px solid #4CAF50;
+    padding-left: 10px;
+    margin-left: 0;
+    font-style: italic;
+    opacity: 0.9;
 }
 
-.audio-play-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-left: 5px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px; 
-    height: 20px;
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
+/* Liens */
+.message-bubble a {
+    color: #4CAF50; /* Couleur d'accentuation */
+    text-decoration: underline;
 }
 
-.audio-play-btn:hover {
-    opacity: 1;
-}
-
-.audio-play-btn img {
-    width: 100%;
-    height: 100%;
-}
-
-.message-info {
-    display: flex;
-    align-items: center;
+/* Corriger la marge du dernier élément pour qu'il ne pousse pas l'heure */
+.message-bubble > *:last-child {
+    margin-bottom: 0 !important;
 }

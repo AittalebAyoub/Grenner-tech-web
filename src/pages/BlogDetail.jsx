@@ -284,8 +284,8 @@ const BlogDetail = () => {
                                     
                                     return (
                                         <Link 
-                                            to={`/blog/${post.id}`} 
-                                            key={post.id} 
+                                            to={`/blog/${post.documentId}`} 
+                                            key={post.documentId} 
                                             className="latest-post-item"
                                             onClick={() => window.scrollTo(0, 0)}
                                         >

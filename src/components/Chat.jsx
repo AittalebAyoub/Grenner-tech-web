@@ -34,7 +34,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([
     { 
       id: 1, 
-      text: `Bonjour ! Je suis GrennerChat, l'agent IA de GrennerTech. (ID Session: ${sessionId}). Comment puis-je vous aider aujourd'hui ?`, 
+      text: `Bonjour ! Je suis GrennerChat, l'agent IA de GrennerTech. Comment puis-je vous aider aujourd'hui ?`, 
       time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }), 
       sender: "other", 
       status: "read",

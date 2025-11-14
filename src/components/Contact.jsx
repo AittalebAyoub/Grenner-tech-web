@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { FaPaperPlane, FaSpinner, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import emailjs from '@emailjs/browser'; 
 
 const Contact = () => {
-    // URL de base de l'API
-    const API_URL = process.env.REACT_APP_STRAPI_API_URL;
-    const ENDPOINT = '/contacts';
 
-    // 1. États du formulaire et des données
+    const SERVICE_ID = 'service_jnc6n98'; 
+    const TEMPLATE_ID = 'template_wiief4b'; 
+    const PUBLIC_KEY = 'qzbd5Xhalz7bRHjUC'; 
+    // L'email de destination est configuré dans le modèle EmailJS.
+    
+    // 1. États du formulaire
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        subject: '', // Garde le champ subject
+        subject: '', 
         message: ''
     });
 
@@ -30,61 +33,50 @@ const Contact = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!API_URL) {
-            setErrorMessage("L'URL de l'API (REACT_APP_STRAPI_API_URL) n'est pas définie.");
-            setSubmitStatus('error');
-            return;
-        }
 
-        // Réinitialiser les états avant la soumission
+
         setIsSubmitting(true);
         setSubmitStatus(null);
         setErrorMessage('');
 
-        // Construction du message combiné (incluant le sujet)
-        // C'est la solution choisie car l'API n'a pas de champ "sujet" séparé dans le payload.
-        const combinedMessage = `Sujet: ${formData.subject || 'Pas de sujet'}\n\n--- Corps du message ---\n\n${formData.message}`;
-
-        // Mappage des données du formulaire au format Strapi attendu
-        const payload = {
-            data: {
-                // Mappage: form.name -> API.nom_complet
-                nom_complet: formData.name, 
-                // Mappage: form.email -> API.email
-                email: formData.email, 
-                // Mappage: form.message + subject -> API.message
-                message: combinedMessage, 
-            }
+        // Les noms des paramètres DOIVENT correspondre à ceux de votre modèle EmailJS (template_wiief4t)
+        const templateParams = {
+            title: formData.subject,    // Votre template utilise 'title' pour le sujet
+            name: formData.name,        // Votre template utilise 'name'
+            email: formData.email,      // Votre template utilise 'email'
+            message: formData.message,  // Votre template utilise 'message'
+            // 'time' a été omis car il était fixé à '12' dans votre test, 
+            // mais vous pouvez l'ajouter ici si nécessaire: time: new Date().toLocaleTimeString(),
         };
 
         try {
-            const response = await fetch(`${API_URL}${ENDPOINT}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });
+            // ENVOI DIRECT DE L'EMAIL VIA EMAILJS
+            const response = await emailjs.send(
+                SERVICE_ID, 
+                TEMPLATE_ID, 
+                templateParams, 
+                PUBLIC_KEY 
+            );
 
-            if (response.ok) {
+            if (response.status === 200) {
                 // Succès
                 setSubmitStatus('success');
-                // Réinitialiser le formulaire après un succès
-                setFormData({ name: '', email: '', subject: '', message: '' });
-                console.log('Demande de contact envoyée avec succès.');
+                setFormData({ name: '', email: '', subject: '', message: '' }); // Réinitialiser le formulaire
+                console.log('Email envoyé avec succès par EmailJS.');
             } else {
-                // Erreur de l'API (ex: 400 Bad Request, 500 Server Error)
-                const errorData = await response.json();
+                // Erreur rare dans EmailJS (mauvaise configuration ou problème interne)
                 setSubmitStatus('error');
-                setErrorMessage(errorData.error?.message || `Erreur de soumission: ${response.status} ${response.statusText}`);
-                console.error('Erreur lors de l\'envoi:', errorData);
+                setErrorMessage(`Erreur lors de l'envoi de l'email. Statut: ${response.status}`);
             }
 
         } catch (error) {
-            // Erreur réseau ou de connexion
+            // Erreur réseau (inclut l'erreur d'authentification)
             setSubmitStatus('error');
-            setErrorMessage(`Erreur réseau: Impossible de se connecter à l'API. ${error.message}`);
-            console.error('Erreur réseau:', error);
+            const msg = error.text && error.text.includes('insufficient authentication scopes') 
+                ? "Échec d'authentification Gmail. Veuillez re-lier votre service dans EmailJS."
+                : `Erreur réseau: Impossible d'envoyer l'email. ${error.text || error.message}`;
+            setErrorMessage(msg);
+            console.error('Erreur réseau/EmailJS:', error);
         } finally {
             setIsSubmitting(false);
         }
@@ -136,7 +128,7 @@ const Contact = () => {
                                         value={formData.name}
                                         onChange={handleChange}
                                         required
-                                        disabled={isSubmitting} // Désactiver pendant l'envoi
+                                        disabled={isSubmitting}
                                     />
                                 </div>
 
@@ -148,7 +140,7 @@ const Contact = () => {
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
-                                        disabled={isSubmitting} // Désactiver pendant l'envoi
+                                        disabled={isSubmitting}
                                     />
                                 </div>
                             </div>
@@ -160,7 +152,7 @@ const Contact = () => {
                                     placeholder="Sujet"
                                     value={formData.subject}
                                     onChange={handleChange}
-                                    disabled={isSubmitting} // Désactiver pendant l'envoi
+                                    disabled={isSubmitting}
                                 />
                             </div>
 
@@ -171,14 +163,14 @@ const Contact = () => {
                                     value={formData.message}
                                     onChange={handleChange}
                                     rows="6"
-                                    disabled={isSubmitting} // Désactiver pendant l'envoi
+                                    disabled={isSubmitting}
                                 ></textarea>
                             </div>
 
                             <button 
                                 type="submit" 
                                 className={`contact-submit-btn ${isSubmitting ? 'submitting' : ''}`}
-                                disabled={isSubmitting} // Empêche le double-clic
+                                disabled={isSubmitting} 
                             >
                                 {isSubmitting ? (
                                     <>
