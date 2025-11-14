@@ -8,6 +8,7 @@ import Services from './components/Services';
 import Articles from './components/Articles';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import Chat from './components/Chat';
 import ServiceDetail from './pages/ServiceDetail';
 import BlogDetail from './pages/BlogDetail';
 import './styles/App.css';
@@ -39,6 +40,7 @@ function App() {
         {/* Blog Detail Page */}
         <Route path="/blog/:id" element={<BlogDetail />} />
       </Routes>
+      <Chat />
     </Router>
   );
 }

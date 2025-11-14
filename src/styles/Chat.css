@@ -1,0 +1,399 @@
+/* ========================================================================= */
+/* --- Styles Globaux de la Fenêtre de Chat et du Bouton Flottant --- */
+/* ========================================================================= */
+.chat-window {
+    position: fixed;
+    bottom: 80px; /* Au-dessus du bouton de bascule */
+    right: 20px;
+    width: 300px;
+    height: 450px;
+    background-color: white;
+    border-radius: 10px; /* Coins arrondis pour la fenêtre */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 999;
+    font-family: Arial, sans-serif;
+    transition: transform 0.3s ease-in-out;
+}
+
+.chat-toggle-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4CAF50; /* Vert dominant */
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.chat-toggle-btn:hover {
+    background-color: #45a049;
+}
+
+/* Style de l'icône de bascule (contient l'image SVG/PNG) */
+.chat-toggle-btn .toggle-icon {
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.chat-toggle-btn .toggle-icon img {
+    width: 24px; 
+    height: 24px;
+  
+}
+
+/* ========================================================================= */
+/* --- Styles de l'En-tête (Header) --- */
+/* ========================================================================= */
+.chat-header {
+    background-color: #4CAF50; /* Vert dominant */
+    color: white;
+    padding: 12px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.chat-header-content {
+    display: flex;
+    align-items: center;
+}
+
+/* Style pour l'image d'icône/logo dans l'en-tête */
+.chat-header-icon-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%; 
+    margin-right: 10px;
+    /* Si l'image est un logo vert, laissez-le tel quel */
+    /* Si besoin de le styliser, utilisez des filtres ici */
+}
+
+/* ========================================================================= */
+/* --- Styles du Corps des Messages (Body) --- */
+/* ========================================================================= */
+.chat-body {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f0f0f0; /* Gris clair pour le fond */
+    /* Petite astuce pour cacher la barre de défilement sur certains navigateurs */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+.chat-body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+/* Conteneur de chaque ligne de message (pour l'alignement avec avatar) */
+.message-row {
+    display: flex;
+    align-items: flex-end; /* Aligner les avatars et les bulles */
+    margin-bottom: 10px;
+}
+
+.message-row.self {
+    justify-content: flex-end; /* Mes messages à droite */
+}
+
+.message-row.other {
+    justify-content: flex-start; /* Messages de l'autre à gauche */
+}
+
+/* Avatars */
+.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 8px;
+    background-color: #ccc; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; 
+}
+
+.bot-avatar {
+    background-color: #F8F8F8; /* Couleur de fond pour l'avatar bot */
+}
+
+
+.user-avatar {
+    background-color: #F8F8F8; /* Couleur de fond pour l'avatar utilisateur */
+}
+
+
+
+/* Bulles de message */
+.message-bubble {
+    padding: 10px 15px;
+    border-radius: 18px; /* Coins très arrondis */
+    max-width: 70%; 
+    position: relative;
+    word-wrap: break-word; 
+    font-size: 0.9em;
+}
+
+/* Message du 'Bot' (Other) */
+.message-bubble.other {
+    background-color: #e6e6e6; /* Gris clair */
+    color: #333;
+    margin-left: 5px; 
+}
+/* Triangle de la bulle 'other' */
+.message-bubble.other::before {
+    content: '';
+    position: absolute;
+    left: -7px; 
+    bottom: 0px; 
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 10px solid #e6e6e6; /* Doit correspondre à la couleur de la bulle */
+    border-bottom: 10px solid transparent;
+}
+
+
+/* Message de l'Utilisateur (Self) */
+.message-bubble.self {
+    background-color: #333; /* Gris foncé, comme sur l'image */
+    color: white;
+    margin-right: 5px;
+}
+/* Triangle de la bulle 'self' */
+.message-bubble.self::before {
+    content: '';
+    position: absolute;
+    right: -7px; 
+    bottom: 0px; 
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-left: 10px solid #333; /* Doit correspondre à la couleur de la bulle */
+    border-bottom: 10px solid transparent;
+}
+
+/* Infos (heure, statut) */
+.message-info {
+    font-size: 0.75em;
+    opacity: 0.8;
+    margin-top: 5px;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.message-bubble.self .message-info {
+    color: rgba(255, 255, 255, 0.8);
+}
+.message-bubble.other .message-info {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.check-icon {
+    font-size: 0.9em;
+    color: #a0a0a0;
+}
+.message-bubble.self .check-icon {
+    color: #a0a0a0;
+}
+
+
+/* ========================================================================= */
+/* --- Styles de la Zone de Saisie (Input Area) --- */
+/* ========================================================================= */
+.chat-input-area {
+    padding: 10px 15px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.chat-input-area input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px; /* Champ très arrondi */
+    margin-right: 10px;
+    font-size: 0.9em;
+    outline: none;
+}
+
+/* Conteneur d'icônes (mic/send) */
+.input-icon {
+    width: 38px; 
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+/* Assure que l'image à l'intérieur est bien dimensionnée */
+.input-icon img {
+    width: 25px; 
+    height: 25px;
+}
+
+/* Icône Micro (Champ vide) - Pas de fond visible */
+.input-icon.mic {
+    background-color: transparent; 
+}
+.input-icon.mic img {
+    /* Le micro dans votre image est vert */
+    /* Si l'image source est noire, utilisez un filtre pour la rendre verte */
+    /* filter: sepia(100%) saturate(300%) hue-rotate(90deg) brightness(70%); */
+    width: 22px; 
+    height: 22px;
+}
+
+/* Icône Envoyer (Champ plein) - Fond vert */
+.input-icon.send {
+    background-color: #4CAF50; /* Vert */
+}
+.input-icon.send img {
+    /* L'icône d'envoi doit être blanche sur le fond vert */
+
+    margin-left: 2px; 
+}
+
+.input-icon:hover {
+    filter: brightness(0.9);
+}
+
+/* ... (Tous les styles précédents restent inchangés) ... */
+
+/* ========================================================================= */
+/* --- Styles des Indicateurs de Chargement (Typing/Loading) --- */
+/* ========================================================================= */
+
+/* 1. Indicateur "Typing" dans le corps du chat */
+.typing-indicator .message-bubble {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e6e6e6 !important;
+    padding: 8px 15px;
+    width: 50px; /* Taille réduite pour les points */
+}
+
+/* Animation des points (Dot Typing) */
+.dot-typing {
+    position: relative;
+    left: -9999px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #333;
+    color: #333;
+    box-shadow: 9999px 0 0 -5px, 10008px 0 0 -5px, 10017px 0 0 -5px; /* Initialisation des 3 points */
+    animation: dotTyping 1.5s infinite ease-in-out;
+}
+
+@keyframes dotTyping {
+    0% {
+        box-shadow: 9999px 0 0 -5px, 10008px 0 0 -5px, 10017px 0 0 -5px;
+    }
+    16.666% {
+        box-shadow: 9999px 0 0 0px, 10008px 0 0 -5px, 10017px 0 0 -5px;
+    }
+    33.333% {
+        box-shadow: 9999px 0 0 0px, 10008px 0 0 0px, 10017px 0 0 -5px;
+    }
+    50% {
+        box-shadow: 9999px 0 0 0px, 10008px 0 0 0px, 10017px 0 0 0px;
+    }
+    66.666% {
+        box-shadow: 9999px 0 0 0px, 10008px 0 0 0px, 10017px 0 0 -5px;
+    }
+    83.333% {
+        box-shadow: 9999px 0 0 0px, 10008px 0 0 -5px, 10017px 0 0 -5px;
+    }
+    100% {
+        box-shadow: 9999px 0 0 -5px, 10008px 0 0 -5px, 10017px 0 0 -5px;
+    }
+}
+
+/* 2. Icône de chargement (Spinner) dans le champ de saisie */
+.input-icon.loading {
+    background-color: #4CAF50; 
+}
+
+.spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Mise à jour pour le champ de saisie désactivé */
+.chat-input-area input:disabled {
+    background-color: #f7f7f7;
+    cursor: not-allowed;
+    color: #888;
+}
+
+
+.input-icon {
+ 
+    margin-left: 5px; 
+}
+
+.audio-play-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 5px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px; 
+    height: 20px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.audio-play-btn:hover {
+    opacity: 1;
+}
+
+.audio-play-btn img {
+    width: 100%;
+    height: 100%;
+}
+
+.message-info {
+    display: flex;
+    align-items: center;
+}
