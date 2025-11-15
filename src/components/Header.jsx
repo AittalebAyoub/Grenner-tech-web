@@ -28,7 +28,7 @@ const Header = () => {
                                 contact.grennertech@gmail.com
                             </span>
                         </div>
-                        {/* Les icônes sociales (supprimées de la topbar pour simplifier) */}
+                        
                     </div>
                 </div>
             </div>

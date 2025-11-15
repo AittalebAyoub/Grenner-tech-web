@@ -1105,7 +1105,7 @@ body {
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .header-topbar {
-    font-size: 0.75rem;
+    font-size: 0.39rem;
     padding: 0.5rem 0;
   }
 
@@ -1117,7 +1117,9 @@ body {
     flex-direction: column;
     gap: 0.5rem;
   }
-
+  .info-item .icon {
+   display:   none;
+  }
   .nav {
     display: none;
   }
@@ -2340,4 +2342,70 @@ body {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+
+/* --- Styles pour les tablettes et bureaux (Appareils de 768px et plus) --- */
+@media (min-width: 768px) {
+    /* 1. Rétablir les styles de taille et d'apparence souhaités pour les grands écrans */
+    .carousel-arrow {
+        background-color: var(--white);
+        border: 2px solid #ddd;
+        width: 50px; 
+        height: 50px;
+        /* Assurez-vous que la position n'est pas absolue si vous utilisez flexbox pour les positionner */
+        position: static; 
+        flex-shrink: 0;
+    }
+
+    /* 2. Maintenir la logique d'ordre flexbox pour l'alignement */
+    .carousel-arrow.prev-arrow {
+        order: -1; /* Place la flèche "précédent" avant le carrousel */
+    }
+
+    .carousel-arrow.next-arrow {
+        order: 3; /* Place la flèche "suivant" après le carrousel */
+    }
+
+    /* 3. Garder l'effet de survol (hover) */
+    .carousel-arrow:hover {
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+        color: var(--white);
+    }
+}
+
+/* --- Styles pour les mobiles (Appareils de moins de 768px) --- */
+@media (max-width: 767px) {
+    /* 1. Rendre les flèches plus petites et moins proéminentes */
+    .carousel-arrow {
+        width: 35px; /* Réduire la taille */
+        height: 35px;
+        font-size: 1rem; /* Réduire la taille de l'icône */
+        border: 1px solid #ddd; /* Réduire l'épaisseur de la bordure */
+        /* Souvent, on les positionne absolument pour qu'elles soient sur le carrousel */
+        position: absolute; 
+        top: 50%; /* Centrage vertical */
+        transform: translateY(-50%);
+        z-index: 10; /* Assurer qu'elles sont au-dessus des éléments du carrousel */
+    }
+
+    /* 2. Positionner les flèches à gauche et à droite du carrousel */
+    .carousel-arrow.prev-arrow {
+        /* L'ordre devient inutile si la flèche est positionnée absolument */
+        order: initial; 
+        left: 10px; /* Décaler à gauche */
+    }
+
+    .carousel-arrow.next-arrow {
+        order: initial;
+        right: 10px; /* Décaler à droite */
+    }
+    
+    /* 3. Ajuster le hover pour les mobiles (souvent ignoré, mais bonne pratique) */
+    .carousel-arrow:hover {
+        /* Garder le style initial de hover ou l'adapter si nécessaire */
+        background-color: var(--primary-green);
+        border-color: var(--primary-green);
+        color: var(--white);
+    }
 }
