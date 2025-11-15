@@ -61,7 +61,7 @@ const Services = () => {
 
   // 4. Rendu des services une fois chargés
   return (
-    <section className="services">
+    <section className="services" id = "solutions">
       <div className="container">
         <div className="services-header">
           <span className="services-label">Nos solutions</span>

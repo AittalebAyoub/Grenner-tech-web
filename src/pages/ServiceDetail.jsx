@@ -64,11 +64,11 @@ const ServiceDetail = () => {
   if (isLoading) {
     return (
       <div className="service-detail-page">
-        <Header />
+      
         <div className="container" style={{ textAlign: 'center', padding: '100px 0' }}>
           <h2>Chargement du détail du service...</h2>
         </div>
-        <Footer />
+       
       </div>
     );
   }
@@ -76,12 +76,12 @@ const ServiceDetail = () => {
   if (error) {
     return (
       <div className="service-detail-page">
-        <Header />
+        
         <div className="container" style={{ textAlign: 'center', padding: '100px 0' }}>
           <h2>Erreur</h2>
           <p>{error}</p>
         </div>
-        <Footer />
+       
       </div>
     );
   }
@@ -90,11 +90,11 @@ const ServiceDetail = () => {
   if (!service) {
     return (
       <div className="service-detail-page">
-        <Header />
+        
         <div className="container" style={{ textAlign: 'center', padding: '100px 0' }}>
           <h2>Service non trouvé</h2>
         </div>
-        <Footer />
+      
       </div>
     );
   }
@@ -102,7 +102,7 @@ const ServiceDetail = () => {
   // 4. Rendu final : Passe les données du service aux sous-composants
   return (
     <div className="service-detail-page">
-      <Header />
+     
       
       {/* Passe l'objet 'service' complet à ServiceHero */}
       <ServiceHero serviceData={service} /> 
@@ -115,7 +115,7 @@ const ServiceDetail = () => {
       
       <Contact />
       <Partners />
-      <Footer />
+      
     </div>
   );
 };

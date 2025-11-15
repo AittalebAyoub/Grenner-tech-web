@@ -255,6 +255,7 @@ body {
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
   text-transform: capitalize;
+  text-decoration: none;
 }
 
 .hero-cta:hover {
@@ -692,7 +693,7 @@ body {
 .blog-meta {
   display: flex;
   gap: 1.2rem;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: var(--text-light);
 }
 
@@ -718,8 +719,7 @@ body {
 }
 
 .blog-footer {
-  display: flex;
-  justify-content: center;
+  display: none;
 }
 
 .blog-view-all {
@@ -878,7 +878,7 @@ body {
 
 .footer-content {
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr 1.2fr;
+  grid-template-columns: 1.2fr 1fr 1fr;
   gap: 3rem;
   padding: 4rem 0 3rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -895,7 +895,7 @@ body {
 }
 
 .footer-logo img {
-  width: 120px;  
+  width: 150px;  
   height: auto;  
 
 }
@@ -936,8 +936,17 @@ body {
   color: var(--white);
   margin: 0;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--primary-green);
-  display: inline-block;
+  position: relative;
+}
+
+.footer-section-title::before {
+  content: " "; 
+  position: absolute; 
+  left: 0; 
+  bottom: 0;
+  height: 2px; 
+  width: 30px; 
+  background-color: var(--primary-green); 
 }
 
 .footer-links {

@@ -3,9 +3,9 @@ import { FaCheckCircle } from 'react-icons/fa';
 
 const About = () => {
   const benefits = [
-    'Suspe ndisse suscept sagittis leo',
-    'Etium estibulum dignissim posuere',
-    'Lorem ipsum on the tend to repeat'
+    "Assurent une agriculture durable et respectueuse de l'écosystème.",
+    'Améliorent la productivité et la qualité des récoltes.',
+    'Garantissent une gestion optimale et économe des ressources hydriques.'
   ];
 
   return (
@@ -30,13 +30,11 @@ const About = () => {
             </h2>
             
             <p className="about-description">
-              There are many variations of passaa of lorem available, but the majority have suffered alteration.
+              Greener Tech est une entreprise spécialisée en agriculture, dédiée à la recherche et au développement de solutions innovantes pour le secteur.
             </p>
             
             <p className="about-description">
-              There are many variations of passages of lorem available but the majority have suffered alteration in some form by injected humor or random word which don't look even.
-            </p>
-
+Notre mission est d'être votre partenaire sur le terrain, en combinant l'expertise agronomique et la technologie de pointe pour des outils qui :            </p>
             {/* Benefits List */}
             <div className="about-benefits">
               {benefits.map((benefit, index) => (

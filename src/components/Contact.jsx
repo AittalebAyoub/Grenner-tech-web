@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // 👈 N'oubliez pas d'importer useEffect
 import { FaPaperPlane, FaSpinner, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import emailjs from '@emailjs/browser'; 
 
 const Contact = () => {
 
+    // VOS IDENTIFIANTS EMAILJS (fournis par vous)
     const SERVICE_ID = 'service_jnc6n98'; 
     const TEMPLATE_ID = 'template_wiief4b'; 
     const PUBLIC_KEY = 'qzbd5Xhalz7bRHjUC'; 
-    // L'email de destination est configuré dans le modèle EmailJS.
     
     // 1. États du formulaire
     const [formData, setFormData] = useState({
@@ -21,6 +21,24 @@ const Contact = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', ou null
     const [errorMessage, setErrorMessage] = useState('');
+
+    // ==========================================================
+    // ✅ HOOK POUR GÉRER LA DISPARITION DU MESSAGE
+    // ==========================================================
+    useEffect(() => {
+        // Déclenche la minuterie uniquement en cas de succès ou d'erreur
+        if (submitStatus) {
+            // Définit une minuterie de 5 secondes (5000ms)
+            const timer = setTimeout(() => {
+                // Réinitialise le statut pour masquer le message (le div disparaît car submitStatus devient null)
+                setSubmitStatus(null);
+            }, 3000); // Temps d'affichage : 5 secondes
+
+            // Fonction de nettoyage : Annule la minuterie si le composant est démonté ou si submitStatus change.
+            return () => clearTimeout(timer);
+        }
+    }, [submitStatus]); // S'exécute à chaque fois que submitStatus est mis à jour
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,7 +54,6 @@ const Contact = () => {
         setSubmitStatus(null);
         setErrorMessage('');
 
-        // Les noms des paramètres DOIVENT correspondre à ceux de votre modèle EmailJS (template_wiief4t)
         const templateParams = {
             title: formData.subject,    
             name: formData.name,        
@@ -46,7 +63,6 @@ const Contact = () => {
         };
 
         try {
-            // ENVOI DIRECT DE L'EMAIL VIA EMAILJS
             const response = await emailjs.send(
                 SERVICE_ID, 
                 TEMPLATE_ID, 
@@ -55,18 +71,15 @@ const Contact = () => {
             );
 
             if (response.status === 200) {
-                // Succès
                 setSubmitStatus('success');
-                setFormData({ name: '', email: '', subject: '', message: '' }); // Réinitialiser le formulaire
+                setFormData({ name: '', email: '', subject: '', message: '' }); 
                 console.log('Email envoyé avec succès par EmailJS.');
             } else {
-                // Erreur rare dans EmailJS (mauvaise configuration ou problème interne)
                 setSubmitStatus('error');
                 setErrorMessage(`Erreur lors de l'envoi de l'email. Statut: ${response.status}`);
             }
 
         } catch (error) {
-            // Erreur réseau (inclut l'erreur d'authentification)
             setSubmitStatus('error');
             const msg = error.text && error.text.includes('insufficient authentication scopes') 
                 ? "Échec d'authentification Gmail. Veuillez re-lier votre service dans EmailJS."

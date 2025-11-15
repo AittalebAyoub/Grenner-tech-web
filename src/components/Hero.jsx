@@ -17,9 +17,7 @@ const Hero = () => {
           Optimisez chaque hectare de votre exploitation.
         </p>
         
-        <button className="hero-cta">
-          Découvrez nos solutions
-        </button>
+       <a href="#solutions" class="hero-cta">Découvrez nos solutions</a>
       </div>
     </section>
   );

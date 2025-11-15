@@ -1,13 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Hero from './components/Hero';
-import About from './components/About';
-import Partners from './components/Partners';
-import Services from './components/Services';
-import Articles from './components/Articles';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ScrollToAnchor from './components/ScrollToAnchor'; 
+import Home from './pages/Home'; // Nouveau composant Home
 import ServiceDetail from './pages/ServiceDetail';
 import BlogDetail from './pages/BlogDetail';
 import './styles/App.css';
@@ -15,30 +11,24 @@ import './styles/App.css';
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* Landing Page */}
-        <Route
-          path="/"
-          element={
-            <div className="App">
-              <Header />
-              <Hero />
-              <About />
-              <Partners />
-              <Services />
-              <Articles />
-              <Contact />
-              <Footer />
-            </div>
-          }
-        />
+      <ScrollToAnchor /> 
+      
+      <div className="App">
+        <Header /> 
         
-        {/* Service Detail Page */}
-        <Route path="/service/:id" element={<ServiceDetail />} />
-
-        {/* Blog Detail Page */}
-        <Route path="/blog/:id" element={<BlogDetail />} />
-      </Routes>
+        <main>
+          <Routes>
+            {/* Page d'accueil : affiche toutes les sections avec IDs d'ancre */}
+            <Route path="/" element={<Home />} /> 
+            
+            {/* Pages de détail */}
+            <Route path="/service/:id" element={<ServiceDetail />} />
+            <Route path="/blog/:id" element={<BlogDetail />} />
+          </Routes>
+        </main>
+        
+        <Footer /> 
+      </div>
     </Router>
   );
 }

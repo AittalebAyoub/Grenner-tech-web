@@ -8,10 +8,6 @@ import Partners from '../components/Partners';
 import Footer from '../components/Footer';
 import BlogHero from '../components/BlogHero';
 
-// ==================================================================================
-// === FONCTIONS UTILITAIRES DE RENDU (Rich Text & Images) ==========================
-// ==================================================================================
-
 // Fonction utilitaire pour extraire l'URL de l'image de couverture
 const getImageUrl = (item, baseUrl) => {
     // Tente de récupérer le premier élément du tableau 'image_coverture'
@@ -206,11 +202,11 @@ const BlogDetail = () => {
     if (loading) {
         return (
             <>
-                <Header />
+           
                 <div className="blog-detail-content" style={{ textAlign: 'center' }}>
                     <div className="container"><p>Chargement...</p></div>
                 </div>
-                <Footer />
+             
             </>
         );
     }
@@ -218,11 +214,11 @@ const BlogDetail = () => {
     if (error || !blog) {
         return (
             <>
-                <Header />
+               
                 <div className="blog-detail-content" style={{ textAlign: 'center' }}>
                     <div className="container"><p>{error || 'Blog non trouvé'}</p></div>
                 </div>
-                <Footer />
+              
             </>
         );
     }
@@ -238,7 +234,7 @@ const BlogDetail = () => {
 
     return (
         <div className="blog-detail-page">
-            <Header />
+           
             <BlogHero blogData={blog} /> 
             {/* Blog Content */}
             <section className="blog-detail-content">
@@ -309,7 +305,7 @@ const BlogDetail = () => {
             </section>
 
             <Partners />
-            <Footer />
+          
         </div>
     );
 };
