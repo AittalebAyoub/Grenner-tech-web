@@ -32,21 +32,17 @@ const Contact = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-
-
         setIsSubmitting(true);
         setSubmitStatus(null);
         setErrorMessage('');
 
         // Les noms des paramètres DOIVENT correspondre à ceux de votre modèle EmailJS (template_wiief4t)
         const templateParams = {
-            title: formData.subject,    // Votre template utilise 'title' pour le sujet
-            name: formData.name,        // Votre template utilise 'name'
-            email: formData.email,      // Votre template utilise 'email'
-            message: formData.message,  // Votre template utilise 'message'
-            // 'time' a été omis car il était fixé à '12' dans votre test, 
-            // mais vous pouvez l'ajouter ici si nécessaire: time: new Date().toLocaleTimeString(),
+            title: formData.subject,    
+            name: formData.name,        
+            email: formData.email,      
+            message: formData.message,  
+            time: new Date().toLocaleTimeString(),
         };
 
         try {
