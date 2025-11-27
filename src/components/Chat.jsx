@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import '../styles/Chat.css'; 
 
 // URLs de l'API
-const API_BASE_URL = 'https://chat-greenertech.onrender.com/ask/';
-const API_AUDIO_URL = 'https://chat-greenertech.onrender.com/generate_audio/';
+const API_BASE_URL = 'http://127.0.0.1:8000/ask/';
+const API_AUDIO_URL = 'http://127.0.0.1:8000/generate_audio/';
 
 const Icons = {
   Sparkles: () => (
@@ -22,16 +22,6 @@ const Icons = {
       <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/>
     </svg>
   ),
-  Play: () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M8 5v14l11-7z"/>
-    </svg>
-  ),
-  Pause: () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
-    </svg>
-  ),
   Close: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M18 6L6 18M6 6l12 12"/>
@@ -40,14 +30,6 @@ const Icons = {
   Chat: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-    </svg>
-  ),
-  Bot: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-      <rect x="8" y="8" width="8" height="8" rx="2"/>
-      <circle cx="10" cy="11" r="1"/>
-      <circle cx="14" cy="11" r="1"/>
-      <path d="M12 14h0"/>
     </svg>
   ),
   User: () => (
@@ -248,7 +230,7 @@ const Chat = () => {
           <div style={styles.header}>
             <div style={styles.headerContent}>
               <div style={styles.headerIcon}>
-                <Icons.Bot />
+                <img src="/icons/grennertech-logo.svg" alt="Logo" style={styles.headerIconImg} />
               </div>
               <div>
                 <div style={styles.headerTitle}>GrennerChat</div>
@@ -279,8 +261,8 @@ const Chat = () => {
                     ...(msg.sender === 'self' ? styles.messageRowSelf : styles.messageRowOther)
                   }}>
                     {msg.sender === 'other' && (
-                      <div style={{...styles.avatar, ...styles.avatarBot}}>
-                        <Icons.Bot />
+                      <div style={styles.avatar}>
+                        <img src="/icons/bot-avatar.svg" alt="Bot" style={styles.avatarImg} />
                       </div>
                     )}
                     
@@ -296,10 +278,14 @@ const Chat = () => {
                             style={styles.audioBtn}
                             onClick={() => handlePlayAudio(msg.audioData.base64, msg.audioData.mimeType, msg.id)}
                           >
-                            {playingMessageId === msg.id && currentAudio && !currentAudio.paused 
-                              ? <Icons.Pause /> 
-                              : <Icons.Play />
-                            }
+                            <img 
+                              src={playingMessageId === msg.id && currentAudio && !currentAudio.paused 
+                                ? "/icons/audio-pause.svg" 
+                                : "/icons/audio-play.svg"
+                              } 
+                              alt="Audio" 
+                              style={styles.audioIcon}
+                            />
                           </button>
                         )}
                       </div>
@@ -317,7 +303,7 @@ const Chat = () => {
                       {msg.suggestedTags.map((tag, idx) => (
                         <button 
                           key={idx}
-                          style={styles.tagBtn}
+                          style={styles.suggestionCard}
                           onClick={() => handleSuggestionClick(tag)}
                           disabled={isLoading}
                         >
@@ -332,8 +318,8 @@ const Chat = () => {
 
             {isLoading && (
               <div style={styles.messageRow}>
-                <div style={{...styles.avatar, ...styles.avatarBot}}>
-                  <Icons.Bot />
+                <div style={styles.avatar}>
+                  <img src="/icons/bot-avatar.svg" alt="Bot" style={styles.avatarImg} />
                 </div>
                 <div style={{...styles.messageBubble, ...styles.messageBubbleOther}}>
                   <div style={styles.typingIndicator}>
@@ -453,10 +439,15 @@ const styles = {
     height: '40px',
     borderRadius: '50%',
     backgroundColor: '#4CAF50',
-    color: 'white',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  headerIconImg: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
   },
   headerTitle: {
     fontSize: '16px',
@@ -518,10 +509,12 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    overflow: 'hidden',
   },
-  avatarBot: {
-    backgroundColor: '#4CAF50',
-    color: 'white',
+  avatarImg: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
   },
   avatarUser: {
     backgroundColor: '#333',
@@ -562,11 +555,15 @@ const styles = {
     background: 'none',
     border: 'none',
     cursor: 'pointer',
-    padding: '4px',
+    padding: '0',
     display: 'flex',
     alignItems: 'center',
     opacity: 0.8,
     transition: 'opacity 0.2s',
+  },
+  audioIcon: {
+    width: '16px',
+    height: '16px',
   },
   typingIndicator: {
     display: 'flex',
@@ -586,16 +583,6 @@ const styles = {
     gap: '8px',
     marginLeft: '40px',
     marginBottom: '12px',
-  },
-  tagBtn: {
-    padding: '8px 14px',
-    backgroundColor: '#ffffff',
-    border: '1px solid #e0e0e0',
-    borderRadius: '20px',
-    fontSize: '13px',
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-    color: '#333',
   },
   suggestionsBottom: {
     padding: '16px 20px 20px',
@@ -666,6 +653,7 @@ const styles = {
     width: '20px',
     height: '20px',
     border: '2px solid #f3f3f3',
+    borderTop: '2px solid #4CAF50',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -686,6 +674,3 @@ styleSheet.textContent = `
 document.head.appendChild(styleSheet);
 
 export default Chat;
-
-
-

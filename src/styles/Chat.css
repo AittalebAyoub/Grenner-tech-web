@@ -120,11 +120,17 @@
   height: 40px;
   border-radius: 50%;
   background-color: var(--color-primary);
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.chat-header-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .chat-header-title {
@@ -261,11 +267,17 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .avatar-bot {
-  background-color: var(--color-primary);
-  color: white;
+  background-color: transparent;
 }
 
 .avatar-user {
@@ -322,17 +334,21 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
   display: flex;
   align-items: center;
   opacity: 0.8;
   transition: opacity var(--transition-fast), transform var(--transition-fast);
-  color: inherit;
 }
 
 .audio-btn:hover {
   opacity: 1;
   transform: scale(1.1);
+}
+
+.audio-btn img {
+  width: 16px;
+  height: 16px;
 }
 
 /* --- Indicateur de frappe --- */
@@ -360,7 +376,7 @@
 }
 
 /* ========================================================================= */
-/* --- TAGS SUGGÉRÉS (dans les messages) --- */
+/* --- TAGS SUGGÉRÉS (style suggestions) --- */
 /* ========================================================================= */
 .tags-container {
   display: flex;
@@ -369,34 +385,6 @@
   margin-left: 40px;
   margin-bottom: var(--spacing-md);
   animation: fadeIn 0.4s ease-out;
-}
-
-.tag-btn {
-  padding: var(--spacing-sm) 14px;
-  background-color: var(--color-bg-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
-  font-size: 13px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  color: var(--color-dark);
-}
-
-.tag-btn:hover:not(:disabled) {
-  background-color: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.2);
-}
-
-.tag-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.tag-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 /* ========================================================================= */
