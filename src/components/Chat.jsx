@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import '../styles/Chat.css'; 
 
 // URLs de l'API
-const API_BASE_URL = 'http://127.0.0.1:8000/ask/';
-const API_AUDIO_URL = 'http://127.0.0.1:8000/generate_audio/';
+const API_BASE_URL = 'https://chat-greenertech.onrender.com/ask/';
+const API_AUDIO_URL = 'https://chat-greenertech.onrender.com/generate_audio/';
 
 const Icons = {
   Sparkles: () => (
@@ -51,6 +50,7 @@ const Chat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentAudio, setCurrentAudio] = useState(null);
   const [playingMessageId, setPlayingMessageId] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const chatBodyRef = useRef(null);
 
   // Suggestions initiales
@@ -60,11 +60,33 @@ const Chat = () => {
     "Qui sont vos partenaires ?"
   ];
 
+  // Détection responsive
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // Bloquer le scroll du body quand le chat est ouvert sur mobile
+  useEffect(() => {
+    if (isMobile && isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, isMobile]);
 
   const handleSendMessage = async (text = inputText.trim()) => {
     if (!text || isLoading) return;
@@ -213,11 +235,50 @@ const Chat = () => {
     setTimeout(() => handleSendMessage(suggestion), 100);
   };
 
+  const getResponsiveStyles = () => {
+    if (isMobile) {
+      return {
+        chatWindow: {
+          position: 'fixed',
+          top: 0,
+          left: '6px',
+          right: 0,
+          bottom: 0,
+          width: 'calc(100% - 12px)',
+          height: '100%',
+          borderRadius: '12px',
+          maxWidth: '100%',
+          zIndex : '1001',
+          marginTop : '32px'
+        },
+        floatingBtn: {
+          bottom: '16px',
+          right: '16px',
+          width: '56px',
+          height: '56px',
+        },
+        suggestionCards: {
+          gridTemplateColumns: '1fr',
+        },
+        messageBubble: {
+          maxWidth: '85%',
+        }
+      };
+    }
+    return {};
+  };
+
+  const responsiveStyles = getResponsiveStyles();
+
   return (
     <div style={styles.container}>
       {/* Bouton flottant */}
       <button 
-        style={{...styles.floatingBtn, ...(isOpen && styles.floatingBtnOpen)}}
+        style={{
+          ...styles.floatingBtn,
+          ...responsiveStyles.floatingBtn,
+          ...(isOpen && styles.floatingBtnOpen)
+        }}
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? <Icons.Close /> : <Icons.Chat />}
@@ -225,17 +286,25 @@ const Chat = () => {
 
       {/* Fenêtre de chat */}
       {isOpen && (
-        <div style={styles.chatWindow}>
+        <div style={{...styles.chatWindow, ...responsiveStyles.chatWindow}}>
           {/* Header */}
           <div style={styles.header}>
             <div style={styles.headerContent}>
               <div style={styles.headerIcon}>
-                <img src="/icons/grennertech-logo.svg" alt="Logo" style={styles.headerIconImg} />
+                <img src="/icons/chat-logo.svg" alt="Logo" style={styles.headerIconImg} />
               </div>
               <div>
                 <div style={styles.headerTitle}>GrennerChat</div>
                 <div style={styles.headerSubtitle}>Agent IA • En ligne</div>
               </div>
+              {isMobile && (
+                <button 
+                  style={styles.closeBtn}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Icons.Close />
+                </button>
+              )}
             </div>
           </div>
 
@@ -244,9 +313,9 @@ const Chat = () => {
             {messages.length === 0 ? (
               // État vide - Écran d'accueil
               <div style={styles.emptyState}>
-                <div style={styles.emptyIcon}>
-                  <img src="/icons/grennertech-logo.svg" alt="Logo" style={styles.headerIconImg} />
-                </div>
+              <div style={styles.headerIcon}>
+                <img src="/icons/chat-logo.svg" alt="Logo" style={styles.headerIconImg} />
+              </div>
                 <h2 style={styles.emptyTitle}>Posez-moi vos questions</h2>
                 <p style={styles.emptySubtitle}>
                   Je suis là pour vous aider avec vos projets et répondre à vos questions
@@ -262,12 +331,13 @@ const Chat = () => {
                   }}>
                     {msg.sender === 'other' && (
                       <div style={styles.avatar}>
-                        <img src="/icons/bot-avatar.svg" alt="Bot" style={styles.avatarImg} />
+                        <img src="/icons/chat-logo.svg" alt="Bot" style={styles.avatarImg} />
                       </div>
                     )}
                     
                     <div style={{
                       ...styles.messageBubble,
+                      ...responsiveStyles.messageBubble,
                       ...(msg.sender === 'self' ? styles.messageBubbleSelf : styles.messageBubbleOther)
                     }}>
                       <p style={styles.messageText}>{msg.text}</p>
@@ -278,14 +348,7 @@ const Chat = () => {
                             style={styles.audioBtn}
                             onClick={() => handlePlayAudio(msg.audioData.base64, msg.audioData.mimeType, msg.id)}
                           >
-                            <img 
-                              src={playingMessageId === msg.id && currentAudio && !currentAudio.paused 
-                                ? "/icons/audio-pause.svg" 
-                                : "/icons/audio-play.svg"
-                              } 
-                              alt="Audio" 
-                              style={styles.audioIcon}
-                            />
+                            {playingMessageId === msg.id && currentAudio && !currentAudio.paused ? '⏸' : '▶'}
                           </button>
                         )}
                       </div>
@@ -318,9 +381,9 @@ const Chat = () => {
 
             {isLoading && (
               <div style={styles.messageRow}>
-                <div style={styles.avatar}>
-                  <img src="/icons/bot-avatar.svg" alt="Bot" style={styles.avatarImg} />
-                </div>
+                      <div style={styles.avatar}>
+                        <img src="/icons/chat-logo.svg" alt="Bot" style={styles.avatarImg} />
+                      </div>
                 <div style={{...styles.messageBubble, ...styles.messageBubbleOther}}>
                   <div style={styles.typingIndicator}>
                     <span style={styles.typingDot}></span>
@@ -336,7 +399,7 @@ const Chat = () => {
           {messages.length === 0 && (
             <div style={styles.suggestionsBottom}>
               <div style={styles.suggestionsLabel}>Suggestions pour commencer</div>
-              <div style={styles.suggestionCards}>
+              <div style={{...styles.suggestionCards, ...responsiveStyles.suggestionCards}}>
                 {initialSuggestions.map((suggestion, idx) => (
                   <button 
                     key={idx}
@@ -415,7 +478,9 @@ const styles = {
     bottom: '100px',
     right: '24px',
     width: '400px',
+    maxWidth: 'calc(100vw - 48px)',
     height: '600px',
+    maxHeight: 'calc(100vh - 120px)',
     backgroundColor: '#ffffff',
     borderRadius: '16px',
     boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
@@ -438,15 +503,17 @@ const styles = {
     width: '40px',
     height: '40px',
     borderRadius: '50%',
+    backgroundColor: '#4CAF50',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    flexShrink: 0,
   },
-  headerIconImg: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+  headerIconPlaceholder: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: '14px',
   },
   headerTitle: {
     fontSize: '16px',
@@ -456,6 +523,17 @@ const styles = {
   headerSubtitle: {
     fontSize: '13px',
     color: '#666',
+  },
+  closeBtn: {
+    marginLeft: 'auto',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    color: '#666',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '4px',
   },
   chatBody: {
     flex: 1,
@@ -509,11 +587,12 @@ const styles = {
     justifyContent: 'center',
     flexShrink: 0,
     overflow: 'hidden',
+    backgroundColor: '#4CAF50',
   },
-  avatarImg: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+  avatarPlaceholder: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: '10px',
   },
   avatarUser: {
     backgroundColor: '#333',
@@ -539,6 +618,7 @@ const styles = {
     margin: '0 0 6px 0',
     fontSize: '14px',
     lineHeight: '1.5',
+    wordBreak: 'break-word',
   },
   messageInfo: {
     display: 'flex',
@@ -559,10 +639,6 @@ const styles = {
     alignItems: 'center',
     opacity: 0.8,
     transition: 'opacity 0.2s',
-  },
-  audioIcon: {
-    width: '16px',
-    height: '16px',
   },
   typingIndicator: {
     display: 'flex',
@@ -598,7 +674,7 @@ const styles = {
   },
   suggestionCards: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
     gap: '8px',
   },
   suggestionCard: {
@@ -643,6 +719,7 @@ const styles = {
     transition: 'all 0.2s',
     backgroundColor: 'transparent',
     color: '#666',
+    flexShrink: 0,
   },
   sendBtn: {
     backgroundColor: '#4CAF50',
@@ -656,6 +733,35 @@ const styles = {
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
+  avatar: {
+    width: '32px',
+    height: '32px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+    overflow: 'hidden',
+  },
+  avatarImg: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+  },
+  headerIcon: {
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  headerIconImg: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+  },
 };
 
 // Animations CSS-in-JS
@@ -668,6 +774,12 @@ styleSheet.textContent = `
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+  
+  @media (max-width: 768px) {
+    body.chat-open {
+      overflow: hidden !important;
+    }
   }
 `;
 document.head.appendChild(styleSheet);
