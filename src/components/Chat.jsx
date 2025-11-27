@@ -245,7 +245,7 @@ const Chat = () => {
               // État vide - Écran d'accueil
               <div style={styles.emptyState}>
                 <div style={styles.emptyIcon}>
-                  <Icons.Sparkles />
+                  <img src="/icons/grennertech-logo.svg" alt="Logo" style={styles.headerIconImg} />
                 </div>
                 <h2 style={styles.emptyTitle}>Posez-moi vos questions</h2>
                 <p style={styles.emptySubtitle}>
@@ -371,7 +371,7 @@ const Chat = () => {
             
             {!inputText && !isLoading && (
               <button style={styles.iconBtn}>
-                <Icons.Mic />
+                <Icons.Send />
               </button>
             )}
 
@@ -438,7 +438,6 @@ const styles = {
     width: '40px',
     height: '40px',
     borderRadius: '50%',
-    backgroundColor: '#4CAF50',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
