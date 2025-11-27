@@ -40,7 +40,7 @@ const Chat = () => {
       status: "read",
       audioData: { base64: null, mimeType: null },
       audioLoading: false,
-      suggestedTags: ["Nos services", "Nous contacter", "Nos réalisations"] // Tags de bienvenue
+      suggestedTags: ["Quels sont vos services ?", "Comment puis-je vous contacter ?", "Qui sont vos partenaires"] 
     },
   ]);
   const [isLoading, setIsLoading] = useState(false); 
@@ -80,6 +80,13 @@ const Chat = () => {
       setCurrentAudio(null);
     }
     
+    // Supprimer les tags de tous les messages précédents
+    setMessages(prevMessages => 
+      prevMessages.map(msg => ({
+        ...msg,
+        suggestedTags: [] // Vider les tags
+      }))
+    );
     // Remplir l'input avec le texte du tag
     setInputText(tagText);
     
@@ -333,7 +340,13 @@ const Chat = () => {
     }
 
     const apiUrlWithSession = API_BASE_URL + sessionId;
-
+    // Supprimer les tags de tous les messages précédents
+    setMessages(prevMessages => 
+      prevMessages.map(msg => ({
+        ...msg,
+        suggestedTags: [] // Vider les tags
+      }))
+    );
     // 1. Ajouter le message de l'utilisateur
     const userMessage = {
       id: messages.length + 1,

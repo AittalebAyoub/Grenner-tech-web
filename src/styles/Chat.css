@@ -433,50 +433,63 @@
     margin-bottom: 0 !important;
 }
 
+/* ========================================================================= */
+/* --- Styles des Tags Suggérés OPTIMISÉS --- */
+/* ========================================================================= */
 .suggested-tags-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 8px; /* Réduit de 10px à 8px */
   margin-top: 10px;
-  margin-left: 35px; /* Aligné avec la bulle du bot (après l'avatar) */
-  max-width: 75%;
+  margin-bottom: 6px;
+  margin-left: 10px; /* Aligné avec la bulle du bot */
+  margin-right: 10px; /* NOUVEAU : Marge à droite pour éviter le débordement */
+  max-width: calc(75% - 10px); /* Prend en compte la marge droite */
+  animation: fadeInUp 0.4s ease-out;
 }
 
 .suggested-tag-btn {
-  background-color: #ffffff;
-  color: #4CAF50;
-  border: 1.5px solid #4CAF50;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #000;
+  border: 1.5px solid #e8e8e8;
   padding: 8px 14px;
   border-radius: 20px;
-  font-size: 0.85em;
+  font-size: 0.7em;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
-  font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  font-weight: 400;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  flex: 0 1 auto; /* NOUVEAU : Taille automatique basée sur le contenu */
+  min-width: fit-content;
 }
 
 .suggested-tag-btn:hover:not(:disabled) {
-  background-color: #4CAF50;
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
   color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+  border-color: #4CAF50;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
 }
 
 .suggested-tag-btn:active:not(:disabled) {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.2);
 }
 
 .suggested-tag-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  background-color: #f5f5f5;
 }
 
-/* Animation d'apparition des tags */
+/* Animation d'apparition des tags améliorée */
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;
@@ -484,6 +497,15 @@
   }
 }
 
-.suggested-tags-container {
-  animation: fadeInUp 0.3s ease-out;
+/* NOUVEAU : Style pour les tags sur mobile (responsive) */
+@media (max-width: 400px) {
+  .suggested-tags-container {
+    max-width: calc(85% - 10px);
+  }
+  
+  .suggested-tag-btn {
+    font-size: 0.78em;
+    padding: 7px 12px;
+    max-width: calc(50% - 6px); /* 2 tags par ligne sur mobile */
+  }
 }
