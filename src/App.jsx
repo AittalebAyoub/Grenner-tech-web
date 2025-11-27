@@ -7,6 +7,8 @@ import Home from './pages/Home'; // Nouveau composant Home
 import ServiceDetail from './pages/ServiceDetail';
 import BlogDetail from './pages/BlogDetail';
 import './styles/App.css';
+import Chat from './components/Chat';
+
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
         
         <Footer /> 
       </div>
+      <Chat />
     </Router>
   );
 }
