@@ -401,7 +401,7 @@ const Chat = () => {
                     
                     {msg.sender === 'self' && (
                       <div style={{...styles.avatar, ...styles.avatarUser}}>
-                        <Icons.User />
+                        <img src="/icons/user-avatar-v2.svg" alt="Bot" style={styles.avatarImg} />
                       </div>
                     )}
                   </div>
@@ -566,7 +566,6 @@ const styles = {
     justifyContent: 'center',
     overflow: 'hidden',
     flexShrink: 0,
-    border: '2px solid #e0e0e0',
   },
   headerIconImg: {
     width: '100%',
@@ -642,7 +641,7 @@ const styles = {
     flexShrink: 0,
     overflow: 'hidden',
     backgroundColor: '#ffffff',
-    border: '1px solid #e0e0e0',
+
   },
   avatarImg: {
     width: '100%',
