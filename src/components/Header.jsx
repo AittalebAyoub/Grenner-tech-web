@@ -1,14 +1,48 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; 
-import { FaMapMarkerAlt, FaEnvelope, FaBars, FaTimes } from 'react-icons/fa';
-
+import { FaMapMarkerAlt, FaEnvelope, FaBars, FaTimes, FaGlobe } from 'react-icons/fa';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { locale, changeLanguage } = useLanguage();
 
-    // Fonction pour fermer le menu mobile lors d'un clic sur un lien
+    // Traductions pour le header
+    const translations = {
+        fr: {
+            home: 'Accueil',
+            about: 'Qui sommes-nous ?',
+            solutions: 'Nos solutions',
+            blogs: 'Nos blogs',
+            contact: 'Contactez-nous',
+            address: 'Bureau A208 cité de l\'innovation sous massa oud ziz agadir 80000, maroc'
+        },
+        en: {
+            home: 'Home',
+            about: 'About us',
+            solutions: 'Our solutions',
+            blogs: 'Our blogs',
+            contact: 'Contact us',
+            address: 'Office A208 innovation city under massa oud ziz agadir 80000, morocco'
+        },
+        ar: {
+            home: 'الرئيسية',
+            about: 'من نحن؟',
+            solutions: 'حلولنا',
+            blogs: 'مدوناتنا',
+            contact: 'اتصل بنا',
+            address: 'مكتب A208 مدينة الابتكار تحت ماسة وادي زيز أكادير 80000، المغرب'
+        }
+    };
+
+    const t = translations[locale];
+
     const handleLinkClick = () => {
         setMenuOpen(false);
+    };
+
+    const handleLanguageChange = (newLocale) => {
+        changeLanguage(newLocale);
     };
 
     return (
@@ -20,7 +54,7 @@ const Header = () => {
                         <div className="topbar-info">
                             <span className="info-item">
                                 <FaMapMarkerAlt className="icon" />
-                                Bureau A208 cité de l'innovation sous massa oud ziz agadir 80000, maroc
+                                {t.address}
                             </span>
                             <span className="info-divider">|</span>
                             <span className="info-item">
@@ -29,6 +63,19 @@ const Header = () => {
                             </span>
                         </div>
                         
+                        {/* Sélecteur de langue */}
+                        <div className="language-selector">
+                            <FaGlobe className="icon" />
+                            <select 
+                                value={locale} 
+                                onChange={(e) => handleLanguageChange(e.target.value)}
+                                className="language-dropdown"
+                            >
+                                <option value="fr">Français</option>
+                                <option value="en">English</option>
+                                <option value="ar">العربية</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -37,25 +84,20 @@ const Header = () => {
             <header className="header">
                 <div className="container">
                     <div className="header-content">
-                        {/* Logo */}
                         <div className="logo">
-                            {/* Utiliser Link pour naviguer vers la page d'accueil en cliquant sur le logo */}
                             <Link to="/" onClick={handleLinkClick}>
                                 <img src="/Logo-GT.png" alt="Greenman" />
                             </Link>
                         </div>
 
-                        {/* Navigation */}
                         <nav className={`nav ${menuOpen ? 'active' : ''}`}>
-                            {/* Utilisation de Link pour naviguer vers la page d'accueil (/) puis vers l'ancre (#section) */}
-                            <Link to="/#accueil" onClick={handleLinkClick}>Accueil</Link>
-                            <Link to="/#about" onClick={handleLinkClick}>Qui sommes-nous ?</Link>
-                            <Link to="#solutions" onClick={handleLinkClick}>Nos solutions</Link>
-                            <Link to="/#blogs" onClick={handleLinkClick}>Nos blogs</Link>
-                            <Link to="/#contact" onClick={handleLinkClick}>Contactez-nous</Link>
+                            <Link to="/#accueil" onClick={handleLinkClick}>{t.home}</Link>
+                            <Link to="/#about" onClick={handleLinkClick}>{t.about}</Link>
+                            <Link to="#solutions" onClick={handleLinkClick}>{t.solutions}</Link>
+                            <Link to="/#blogs" onClick={handleLinkClick}>{t.blogs}</Link>
+                            <Link to="/#contact" onClick={handleLinkClick}>{t.contact}</Link>
                         </nav>
 
-                        {/* Actions */}
                         <div className="header-actions">
                             <button 
                                 className="menu-toggle"

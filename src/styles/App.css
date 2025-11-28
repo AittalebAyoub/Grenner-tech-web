@@ -2409,3 +2409,185 @@ body {
         color: var(--white);
     }
 }
+.topbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.language-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.language-selector .icon {
+    color: #fff;
+}
+
+.language-dropdown {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.language-dropdown:hover {
+    border-color: #4CAF50;
+}
+
+/* Support RTL pour l'arabe */
+.hero.rtl,
+.about.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.about.rtl .about-content {
+  flex-direction: row-reverse;
+}
+
+.about.rtl .benefit-item {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.about.rtl .benefit-icon {
+  margin-left: 12px;
+  margin-right: 0;
+}
+
+/* Ajustements pour la navigation en arabe */
+.header.rtl .nav {
+  flex-direction: row-reverse;
+}
+
+/* Contact RTL */
+.contact.rtl .form-row {
+    flex-direction: row-reverse;
+}
+
+.contact.rtl .contact-submit-btn {
+    flex-direction: row-reverse;
+}
+
+.contact.rtl .status-icon {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+/* Footer RTL */
+.footer.rtl {
+    direction: rtl;
+    text-align: right;
+}
+
+.footer.rtl .footer-content {
+    flex-direction: row-reverse;
+}
+
+.footer.rtl .contact-item {
+    flex-direction: row-reverse;
+}
+
+.footer.rtl .contact-icon {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+.footer.rtl .footer-links {
+    text-align: right;
+}
+
+.footer.rtl .footer-bottom-content {
+    flex-direction: row-reverse;
+}
+
+/* Blog RTL */
+.blog.rtl .blog-header {
+    text-align: right;
+}
+
+.blog.rtl .blog-meta {
+    flex-direction: row-reverse;
+}
+
+.blog.rtl .carousel-arrow.prev-arrow {
+    left: auto;
+    right: -20px;
+}
+
+.blog.rtl .carousel-arrow.next-arrow {
+    right: auto;
+    left: -20px;
+}
+
+/* Blog Detail RTL */
+.blog-detail-page.rtl {
+    direction: rtl;
+}
+
+.blog-detail-page.rtl .blog-detail-meta {
+    flex-direction: row-reverse;
+}
+
+.blog-detail-page.rtl .blog-breadcrumb {
+    flex-direction: row-reverse;
+}
+
+.blog-detail-page.rtl .latest-post-item {
+    flex-direction: row-reverse;
+}
+
+.blog-hero.rtl .blog-breadcrumb {
+    flex-direction: row-reverse;
+}
+
+/* Services RTL */
+.services.rtl .services-header {
+    text-align: right;
+}
+
+.services.rtl .service-title {
+    flex-direction: row-reverse;
+}
+
+.services.rtl .service-arrow {
+    margin-left: 0;
+    margin-right: 8px;
+    transform: rotate(180deg);
+}
+
+/* Service Detail RTL */
+.service-detail-page.rtl,
+.service-content.rtl,
+.service-hero.rtl {
+    direction: rtl;
+}
+
+.service-hero.rtl .service-breadcrumb {
+    flex-direction: row-reverse;
+}
+
+.service-content.rtl .service-images-section {
+    flex-direction: row-reverse;
+}
+
+.service-content.rtl .service-content-with-stats {
+    flex-direction: row-reverse;
+}
+
+.service-content.rtl .benefit-item {
+    flex-direction: row-reverse;
+}
+
+.service-content.rtl .benefit-check {
+    margin-left: 15px;
+    margin-right: 0;
+}
+
+.service-content.rtl .stat-header {
+    flex-direction: row-reverse;
+}

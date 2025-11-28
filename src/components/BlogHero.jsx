@@ -1,41 +1,41 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaChevronRight } from 'react-icons/fa';
+import { useLanguage } from '../contexts/LanguageContext';
 
-// Ce composant est conçu pour la page de détail d'un article de blog (BlogDetail.jsx)
 const BlogDetailHero = ({ blogData }) => {
+    const { locale } = useLanguage();
     
-    // Extrait le titre de l'article à partir des données passées.
-    // L'objet 'blogData' est le 'blog' chargé dans BlogDetail.jsx, 
-    // qui contient le champ 'titre'.
-    const title = blogData?.titre || 'Détail de l\'Article';
-    const breadcrumbLabel = blogData?.titre || 'Article'; 
-    
-    // NOTE : L'image de fond et le style général de la section sont gérés 
-    // par le CSS de la classe .blog-hero.
+    const translations = {
+        fr: {
+            home: 'Accueil',
+            blog: 'Blog'
+        },
+        en: {
+            home: 'Home',
+            blog: 'Blog'
+        },
+        ar: {
+            home: 'الرئيسية',
+            blog: 'المدونة'
+        }
+    };
+
+    const t = translations[locale];
+    const title = blogData?.titre || t.blog;
     
     return (
-        <section 
-            className="blog-hero"
-            // L'attribut 'style' n'est pas utilisé ici, il est géré par le CSS
-        >
-            {/* L'overlay est nécessaire pour améliorer le contraste du texte sur l'image de fond */}
+        <section className={`blog-hero ${locale === 'ar' ? 'rtl' : ''}`}>
             <div className="blog-hero-overlay"></div> 
             
             <div className="blog-hero-content">
                 <div className="blog-breadcrumb">
-                    {/* Lien vers l'accueil */}
-                    <Link to="/">Accueil</Link>
+                    <Link to="/">{t.home}</Link>
                     <FaChevronRight className="breadcrumb-icon" />
-                    
-                    {/* Lien vers la page de listing des blogs */}
-                    {/* Assurez-vous que l'URL vers votre page de listing est bien '/blog' */}
-                    <Link to="/#blogs">Blog</Link> 
+                    <Link to="/#blogs">{t.blog}</Link> 
                     <FaChevronRight className="breadcrumb-icon" />
-                    
                 </div>
                 
-                {/* Titre principal de la page, dynamique */}
                 <h1 className="blog-hero-title">{title}</h1>
             </div>
         </section>

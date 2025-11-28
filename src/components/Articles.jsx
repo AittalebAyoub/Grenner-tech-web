@@ -1,24 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaUser, FaClock, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useLanguage } from '../contexts/LanguageContext';
 
-// Définir l'URL de base de l'API Strapi.
 const API_BASE_URL = process.env.REACT_APP_STRAPI_API_URL;
-const BLOG_API_ENDPOINT = `${API_BASE_URL}/blogs?populate=*`;
 
 const Articles = () => {
-    // ... (Définition des états et fonctions formatDate, useEffect restent identiques) ...
+    const { locale } = useLanguage();
     const [articles, setArticles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(0); 
-    const itemsPerPage = 3; 
+    const itemsPerPage = 3;
+
+    const translations = {
+        fr: {
+            label: 'Nos blogs',
+            title: 'Actualités et articles',
+            loading: 'Chargement des articles...',
+            noArticles: 'Aucun article de blog n\'est disponible pour le moment.',
+            viewAll: 'Voir tous les articles',
+            errorTitle: 'Erreur',
+            readTime: 'min de lecture',
+            author: 'Inconnu'
+        },
+        en: {
+            label: 'Our blogs',
+            title: 'News and articles',
+            loading: 'Loading articles...',
+            noArticles: 'No blog articles are available at the moment.',
+            viewAll: 'View all articles',
+            errorTitle: 'Error',
+            readTime: 'min read',
+            author: 'Unknown'
+        },
+        ar: {
+            label: 'مدوناتنا',
+            title: 'الأخبار والمقالات',
+            loading: 'جاري تحميل المقالات...',
+            noArticles: 'لا توجد مقالات متاحة في الوقت الحالي.',
+            viewAll: 'عرض جميع المقالات',
+            errorTitle: 'خطأ',
+            readTime: 'دقيقة قراءة',
+            author: 'غير معروف'
+        }
+    };
+
+    const t = translations[locale];
 
     const formatDate = (dateString) => {
-        if (!dateString) return 'Date inconnue';
+        if (!dateString) return t.loading;
         try {
+            const localeMap = {
+                fr: 'fr-FR',
+                en: 'en-US',
+                ar: 'ar-MA'
+            };
             const options = { day: 'numeric', month: 'short', year: 'numeric' };
-            return new Date(dateString).toLocaleDateString('fr-FR', options);
+            return new Date(dateString).toLocaleDateString(localeMap[locale], options);
         } catch (e) {
              return 'Date invalide';
         }
@@ -33,6 +72,8 @@ const Articles = () => {
 
         async function fetchBlogs() {
             try {
+                // Ajouter le paramètre locale à l'API
+                const BLOG_API_ENDPOINT = `${API_BASE_URL}/blogs?populate=*&locale=${locale}`;
                 const response = await fetch(BLOG_API_ENDPOINT);
                 
                 if (!response.ok) {
@@ -57,9 +98,8 @@ const Articles = () => {
         }
 
         fetchBlogs();
-    }, []); 
+    }, [locale]); // Recharger quand la langue change
 
-    // --- LOGIQUE DU CARROUSEL ---
     const totalArticles = articles.length;
     const maxIndex = totalArticles > itemsPerPage ? totalArticles - itemsPerPage : 0; 
     
@@ -82,33 +122,32 @@ const Articles = () => {
         });
     };
 
-
-    // --- 4. Rendu des états de chargement et d'erreur ---
     if (isLoading || error || totalArticles === 0) {
-        // Rendu simplifié pour ne pas répéter les blocs de code précédents
         return (
-            <section className="blog">
+            <section className={`blog ${locale === 'ar' ? 'rtl' : ''}`} id="blogs">
                 <div className="container">
-                    {isLoading && <p>Chargement des articles...</p>}
-                    {error && <div className="error-box"><h2 className="error-title">Erreur</h2><p className="error-message">{error}</p></div>}
-                    {!isLoading && !error && totalArticles === 0 && <p>Aucun article de blog n'est disponible pour le moment.</p>}
+                    {isLoading && <p>{t.loading}</p>}
+                    {error && (
+                        <div className="error-box">
+                            <h2 className="error-title">{t.errorTitle}</h2>
+                            <p className="error-message">{error}</p>
+                        </div>
+                    )}
+                    {!isLoading && !error && totalArticles === 0 && <p>{t.noArticles}</p>}
                 </div>
             </section>
         );
     }
 
-
-    // --- 5. Rendu principal ---
     return (
-        <section className="blog"  id = "blogs">
+        <section className={`blog ${locale === 'ar' ? 'rtl' : ''}`} id="blogs">
             <div className="container">
                 <div className="blog-header">
-                    <span className="blog-label">Nos blogs</span>
-                    <h2 className="blog-title">Actualités et articles</h2>
+                    <span className="blog-label">{t.label}</span>
+                    <h2 className="blog-title">{t.title}</h2>
                 </div>
 
                 <div className="blog-carousel-wrapper">
-                    
                     {totalArticles > itemsPerPage && (
                         <>
                             <button className="carousel-arrow prev-arrow" onClick={handlePrev}>
@@ -122,25 +161,15 @@ const Articles = () => {
 
                     <div className="blog-grid">
                         {visibleArticles.map((article) => {
-                            
-                            const attr = article ;
-                            
+                            const attr = article;
                             if (!attr) return null;
 
                             const keyId = article.id;
-                            const slug =  attr.documentId 
-
+                            const slug = attr.documentId;
                             
-                            // 1. image_coverture est un ARRAY, nous prenons le premier élément (l'objet image)
                             const imageObject = attr.image_coverture && attr.image_coverture[0]; 
-                            
-                            // 2. Nous accédons directement à l'URL de l'objet image
                             const imageUrl = imageObject?.url || '/placeholder.jpg';
-
-                            // 3. Si l'URL est relative, on ajoute l'API_BASE_URL (mais ici, elle est absolue)
                             const finalImageUrl = imageUrl.startsWith('http') ? imageUrl : `${API_BASE_URL}${imageUrl}`;
-                            
-                            // **********************************************
 
                             return (
                                 <Link 
@@ -151,7 +180,7 @@ const Articles = () => {
                                     <div className="blog-card">
                                         <div className="blog-image-wrapper">
                                             <img 
-                                                src={finalImageUrl} // Utilisation de finalImageUrl
+                                                src={finalImageUrl}
                                                 alt={attr.titre} 
                                             />
                                             <span className="blog-date-badge">
@@ -162,10 +191,10 @@ const Articles = () => {
                                         <div className="blog-card-content">
                                             <div className="blog-meta">
                                                 <span className="blog-author">
-                                                    <FaUser /> {attr.auteur || 'Inconnu'}
+                                                    <FaUser /> {attr.auteur || t.author}
                                                 </span>
                                                 <span className="blog-read-time">
-                                                    <FaClock /> {attr.temps_lecture} min de lecture
+                                                    <FaClock /> {attr.temps_lecture} {t.readTime}
                                                 </span>
                                             </div>
 
@@ -179,7 +208,7 @@ const Articles = () => {
                 </div>
 
                 <div className="blog-footer">
-                    <Link to="/blogs" className="blog-view-all">Voir tous les articles</Link>
+                    <Link to="/blogs" className="blog-view-all">{t.viewAll}</Link>
                 </div>
             </div>
         </section>

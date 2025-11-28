@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 // URLs de l'API
-const API_BASE_URL = 'https://chat-greenertech.onrender.com/ask/';
-const API_AUDIO_URL = 'https://chat-greenertech.onrender.com/generate_audio/';
+const API_BASE_URL = 'http://127.0.0.1:8000/ask/';
+const API_AUDIO_URL = 'http://127.0.0.1:8000/generate_audio/';
 
 const Icons = {
   Sparkles: () => (
@@ -51,6 +52,7 @@ const Chat = () => {
   const [currentAudio, setCurrentAudio] = useState(null);
   const [playingMessageId, setPlayingMessageId] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth > 768 && window.innerWidth <= 1024);
   const chatBodyRef = useRef(null);
 
   // Suggestions initiales
@@ -60,10 +62,12 @@ const Chat = () => {
     "Qui sont vos partenaires ?"
   ];
 
-  // Détection responsive
+  // Détection responsive améliorée
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      const width = window.innerWidth;
+      setIsMobile(width <= 768);
+      setIsTablet(width > 768 && width <= 1024);
     };
 
     window.addEventListener('resize', handleResize);
@@ -106,7 +110,12 @@ const Chat = () => {
       status: "sent"
     };
     
-    setMessages(prev => [...prev, userMessage]);
+    // Supprimer les anciennes tags en mettant à jour les messages
+    setMessages(prev => prev.map(msg => ({
+      ...msg,
+      suggestedTags: [] // Vider les tags des anciens messages
+    })).concat(userMessage));
+    
     setInputText('');
     setIsLoading(true);
 
@@ -241,19 +250,19 @@ const Chat = () => {
         chatWindow: {
           position: 'fixed',
           top: 0,
-          left: '6px',
+          left: 0,
           right: 0,
           bottom: 0,
-          width: 'calc(100% - 12px)',
+          width: '100%',
           height: '100%',
-          borderRadius: '12px',
+          borderRadius: 0,
           maxWidth: '100%',
-          zIndex : '1001',
-          marginTop : '32px'
+          zIndex: 1001,
+          marginTop: 0
         },
         floatingBtn: {
-          bottom: '16px',
-          right: '16px',
+          bottom: '20px',
+          right: '20px',
           width: '56px',
           height: '56px',
         },
@@ -261,7 +270,17 @@ const Chat = () => {
           gridTemplateColumns: '1fr',
         },
         messageBubble: {
-          maxWidth: '85%',
+          maxWidth: '80%',
+        }
+      };
+    } else if (isTablet) {
+      return {
+        chatWindow: {
+          width: '450px',
+          height: '650px',
+        },
+        messageBubble: {
+          maxWidth: '78%',
         }
       };
     }
@@ -293,7 +312,7 @@ const Chat = () => {
               <div style={styles.headerIcon}>
                 <img src="/icons/chat-logo.svg" alt="Logo" style={styles.headerIconImg} />
               </div>
-              <div>
+              <div style={{flex: 1}}>
                 <div style={styles.headerTitle}>GrennerChat</div>
                 <div style={styles.headerSubtitle}>Agent IA • En ligne</div>
               </div>
@@ -313,9 +332,9 @@ const Chat = () => {
             {messages.length === 0 ? (
               // État vide - Écran d'accueil
               <div style={styles.emptyState}>
-              <div style={styles.headerIcon}>
-                <img src="/icons/chat-logo.svg" alt="Logo" style={styles.headerIconImg} />
-              </div>
+                <div style={styles.headerIcon}>
+                  <img src="/icons/chat-logo.svg" alt="Logo" style={styles.headerIconImg} />
+                </div>
                 <h2 style={styles.emptyTitle}>Posez-moi vos questions</h2>
                 <p style={styles.emptySubtitle}>
                   Je suis là pour vous aider avec vos projets et répondre à vos questions
@@ -340,7 +359,33 @@ const Chat = () => {
                       ...responsiveStyles.messageBubble,
                       ...(msg.sender === 'self' ? styles.messageBubbleSelf : styles.messageBubbleOther)
                     }}>
-                      <p style={styles.messageText}>{msg.text}</p>
+                      {msg.sender === 'self' ? (
+                        <p style={styles.messageText}>{msg.text}</p>
+                      ) : (
+                        <div style={styles.markdownContent}>
+                          <ReactMarkdown
+                            components={{
+                              p: ({children}) => <p style={styles.markdownParagraph}>{children}</p>,
+                              strong: ({children}) => <strong style={styles.markdownBold}>{children}</strong>,
+                              em: ({children}) => <em style={styles.markdownItalic}>{children}</em>,
+                              ul: ({children}) => <ul style={styles.markdownList}>{children}</ul>,
+                              ol: ({children}) => <ol style={styles.markdownList}>{children}</ol>,
+                              li: ({children}) => <li style={styles.markdownListItem}>{children}</li>,
+                              a: ({href, children}) => <a href={href} style={styles.markdownLink} target="_blank" rel="noopener noreferrer">{children}</a>,
+                              code: ({inline, children}) => 
+                                inline ? 
+                                  <code style={styles.markdownInlineCode}>{children}</code> : 
+                                  <code style={styles.markdownCodeBlock}>{children}</code>,
+                              h1: ({children}) => <h1 style={styles.markdownH1}>{children}</h1>,
+                              h2: ({children}) => <h2 style={styles.markdownH2}>{children}</h2>,
+                              h3: ({children}) => <h3 style={styles.markdownH3}>{children}</h3>,
+                              blockquote: ({children}) => <blockquote style={styles.markdownBlockquote}>{children}</blockquote>,
+                            }}
+                          >
+                            {msg.text}
+                          </ReactMarkdown>
+                        </div>
+                      )}
                       <div style={styles.messageInfo}>
                         <span style={styles.messageTime}>{msg.time}</span>
                         {msg.sender === 'other' && msg.audioData?.base64 && (
@@ -361,12 +406,21 @@ const Chat = () => {
                     )}
                   </div>
 
-                  {msg.sender === 'other' && msg.suggestedTags?.length > 0 && (
-                    <div style={styles.tagsContainer}>
+                  {/* Afficher les tags UNIQUEMENT pour le dernier message du bot */}
+                  {msg.sender === 'other' && 
+                   msg.suggestedTags?.length > 0 && 
+                   msg.id === messages[messages.length - 1].id && (
+                    <div style={{
+                      ...styles.tagsContainer,
+                      ...(isMobile && styles.tagsContainerMobile)
+                    }}>
                       {msg.suggestedTags.map((tag, idx) => (
                         <button 
                           key={idx}
-                          style={styles.suggestionCard}
+                          style={{
+                            ...styles.suggestionCard,
+                            ...(isMobile && styles.suggestionCardMobile)
+                          }}
                           onClick={() => handleSuggestionClick(tag)}
                           disabled={isLoading}
                         >
@@ -381,9 +435,9 @@ const Chat = () => {
 
             {isLoading && (
               <div style={styles.messageRow}>
-                      <div style={styles.avatar}>
-                        <img src="/icons/chat-logo.svg" alt="Bot" style={styles.avatarImg} />
-                      </div>
+                <div style={styles.avatar}>
+                  <img src="/icons/chat-logo.svg" alt="Bot" style={styles.avatarImg} />
+                </div>
                 <div style={{...styles.messageBubble, ...styles.messageBubbleOther}}>
                   <div style={styles.typingIndicator}>
                     <span style={styles.typingDot}></span>
@@ -403,7 +457,10 @@ const Chat = () => {
                 {initialSuggestions.map((suggestion, idx) => (
                   <button 
                     key={idx}
-                    style={styles.suggestionCard}
+                    style={{
+                      ...styles.suggestionCard,
+                      ...(isMobile && styles.suggestionCardMobile)
+                    }}
                     onClick={() => handleSuggestionClick(suggestion)}
                     disabled={isLoading}
                   >
@@ -503,17 +560,18 @@ const styles = {
     width: '40px',
     height: '40px',
     borderRadius: '50%',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#ffffff',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
     flexShrink: 0,
+    border: '2px solid #e0e0e0',
   },
-  headerIconPlaceholder: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: '14px',
+  headerIconImg: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
   },
   headerTitle: {
     fontSize: '16px',
@@ -550,15 +608,11 @@ const styles = {
     textAlign: 'center',
     padding: '40px 20px',
   },
-  emptyIcon: {
-    color: '#4CAF50',
-    marginBottom: '20px',
-  },
   emptyTitle: {
     fontSize: '24px',
     fontWeight: '600',
     color: '#1a1a1a',
-    margin: '0 0 8px 0',
+    margin: '20px 0 8px 0',
   },
   emptySubtitle: {
     fontSize: '14px',
@@ -587,12 +641,13 @@ const styles = {
     justifyContent: 'center',
     flexShrink: 0,
     overflow: 'hidden',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e0e0e0',
   },
-  avatarPlaceholder: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: '10px',
+  avatarImg: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
   },
   avatarUser: {
     backgroundColor: '#333',
@@ -659,6 +714,10 @@ const styles = {
     marginLeft: '40px',
     marginBottom: '12px',
   },
+  tagsContainerMobile: {
+    marginLeft: '0px',
+    justifyContent: 'flex-start',
+  },
   suggestionsBottom: {
     padding: '16px 20px 20px',
     borderTop: '1px solid #f0f0f0',
@@ -689,6 +748,10 @@ const styles = {
     lineHeight: '1.3',
     color: '#333',
     fontWeight: '500',
+  },
+  suggestionCardMobile: {
+    padding: '10px',
+    fontSize: '13px',
   },
   inputArea: {
     padding: '16px 20px',
@@ -733,34 +796,81 @@ const styles = {
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
-  avatar: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-    overflow: 'hidden',
+  // Styles pour le Markdown
+  markdownContent: {
+    fontSize: '14px',
+    lineHeight: '1.6',
+    color: '#1a1a1a',
   },
-  avatarImg: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+  markdownParagraph: {
+    margin: '0 0 8px 0',
+    fontSize: '14px',
+    lineHeight: '1.6',
   },
-  headerIcon: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
+  markdownBold: {
+    fontWeight: '600',
+    color: '#1a1a1a',
   },
-  headerIconImg: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+  markdownItalic: {
+    fontStyle: 'italic',
+  },
+  markdownList: {
+    margin: '8px 0',
+    paddingLeft: '20px',
+  },
+  markdownListItem: {
+    margin: '4px 0',
+    fontSize: '14px',
+    lineHeight: '1.5',
+  },
+  markdownLink: {
+    color: '#4CAF50',
+    textDecoration: 'none',
+    borderBottom: '1px solid #4CAF50',
+    transition: 'all 0.2s',
+  },
+  markdownInlineCode: {
+    backgroundColor: '#f5f5f5',
+    padding: '2px 6px',
+    borderRadius: '4px',
+    fontSize: '13px',
+    fontFamily: 'monospace',
+    color: '#e91e63',
+  },
+  markdownCodeBlock: {
+    display: 'block',
+    backgroundColor: '#f5f5f5',
+    padding: '12px',
+    borderRadius: '8px',
+    fontSize: '13px',
+    fontFamily: 'monospace',
+    overflow: 'auto',
+    margin: '8px 0',
+  },
+  markdownH1: {
+    fontSize: '20px',
+    fontWeight: '600',
+    margin: '12px 0 8px 0',
+    color: '#1a1a1a',
+  },
+  markdownH2: {
+    fontSize: '18px',
+    fontWeight: '600',
+    margin: '10px 0 6px 0',
+    color: '#1a1a1a',
+  },
+  markdownH3: {
+    fontSize: '16px',
+    fontWeight: '600',
+    margin: '8px 0 4px 0',
+    color: '#1a1a1a',
+  },
+  markdownBlockquote: {
+    borderLeft: '3px solid #4CAF50',
+    paddingLeft: '12px',
+    margin: '8px 0',
+    color: '#666',
+    fontStyle: 'italic',
   },
 };
 

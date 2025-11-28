@@ -1,17 +1,10 @@
 import React from 'react';
 import { FaCheck, FaTwitter } from 'react-icons/fa';
+import { useLanguage } from '../contexts/LanguageContext';
 
-// ... (Importations FaCheck, FaTwitter, React)
-
-// ----------------------------------------------------------------------------------
-// --- Fonctions de Rendu du Contenu Riche (Rich Text Renderer) ---------------------
-// ----------------------------------------------------------------------------------
-
-// Fonction interne pour appliquer le style de texte (gras, italique, lien) - Pas de changement structurel ici
+// Fonctions de rendu du contenu riche (inchangées)
 const renderText = (children) => {
-    // ... (Logique de renderText inchangée)
     return children.map((child, childIndex) => {
-        // Gère les liens
         if (child.type === 'link' && child.url) {
             return (
                 <a key={childIndex} href={child.url} target="_blank" rel="noopener noreferrer" className="rich-text-link">
@@ -20,7 +13,6 @@ const renderText = (children) => {
             );
         }
 
-        // Gère les styles de base (texte)
         const style = {
             fontWeight: child.bold ? 'bold' : 'normal',
             fontStyle: child.italic ? 'italic' : 'normal',
@@ -34,12 +26,10 @@ const renderText = (children) => {
     });
 };
 
-// Fonction principale pour rendre les blocs de contenu riche (Headings, Paragraphs, Lists)
 const renderRichText = (blocks) => {
     return blocks.map((block, index) => {
         const key = `${block.type}-${index}`;
 
-        // 1. Gère les Titres (Headings) - Ajout de la classe "rich-text-heading"
         if (block.type === 'heading' && block.children) {
             const HeadingTag = `h${block.level || 3}`; 
             return (
@@ -49,7 +39,6 @@ const renderRichText = (blocks) => {
             );
         }
 
-        // 2. Gère les Paragraphes (Paragraphs) - Ajout de la classe "rich-text-paragraph"
         if (block.type === 'paragraph' && block.children) {
             return (
                 <p key={key} className="rich-text-paragraph">
@@ -58,11 +47,9 @@ const renderRichText = (blocks) => {
             );
         }
 
-        // 3. Gère les Listes (Lists) - Ajout de la classe "rich-text-list"
         if (block.type === 'list' && block.children) {
             const ListTag = block.format === 'ordered' ? 'ol' : 'ul';
             return (
-                // C'est ici que l'indentation (padding-left) sera gérée par la classe CSS
                 <ListTag key={key} className={`rich-text-list rich-text-${block.format}`}>
                     {block.children.map((listItem, itemIndex) => {
                         if (listItem.type === 'list-item' && listItem.children) {
@@ -78,27 +65,45 @@ const renderRichText = (blocks) => {
             );
         }
         
-        // Gère les autres types non pris en charge
         return null;
     });
 };
 
-
-// ----------------------------------------------------------------------------------
-// --- Composant Principal : ServiceContent -----------------------------------------
-// ----------------------------------------------------------------------------------
-
 const ServiceContent = ({ serviceData }) => {
+    const { locale } = useLanguage();
     
-    // ... (Logique d'extraction des données et gestion d'erreur inchangée)
+    const translations = {
+        fr: {
+            error: 'Erreur',
+            errorMessage: 'Impossible de charger le détail de ce service.',
+            statsTitle: 'Indicateurs de Performance',
+            benefitsTitle: 'Bénéfices et Avantages Clés'
+        },
+        en: {
+            error: 'Error',
+            errorMessage: 'Unable to load service details.',
+            statsTitle: 'Performance Indicators',
+            benefitsTitle: 'Key Benefits and Advantages'
+        },
+        ar: {
+            error: 'خطأ',
+            errorMessage: 'تعذر تحميل تفاصيل الخدمة.',
+            statsTitle: 'مؤشرات الأداء',
+            benefitsTitle: 'الفوائد والمزايا الرئيسية'
+        }
+    };
+
+    const t = translations[locale];
+    
     if (!serviceData) {
         return (
             <div className="error-message-container">
-                <h1 className="error-title">Erreur</h1>
-                <p className="error-text">Impossible de charger le détail de ce service.</p>
+                <h1 className="error-title">{t.error}</h1>
+                <p className="error-text">{t.errorMessage}</p>
             </div>
         );
     }
+
     const titre = serviceData.titre || "Contenu du Service";
     const detailedContentBlocks = serviceData.description_detailler;
     const benefices = serviceData.benefices_avanages;
@@ -107,17 +112,12 @@ const ServiceContent = ({ serviceData }) => {
     const secondaryImage1 = serviceData.galerie_images?.[0]?.url;
     const secondaryImage2 = serviceData.galerie_images?.[1]?.url;
 
-
     return (
-        <section className="service-content">
+        <section className={`service-content ${locale === 'ar' ? 'rtl' : ''}`}>
             <div className="container">
                 <div className="service-content-wrapper">
                     
-                    {/* 1. Section d'images (Structure: 1 Grande image à gauche, 2 petites à droite) */}
-                    {/* ... (Code de la section Images inchangé) ... */}
                     <div className="service-images-section">
-                        
-                        {/* Image Principale à Gauche (Image de Couverture) */}
                         {mainImage && (
                             <div className="service-image-left">
                                 <img 
@@ -128,7 +128,6 @@ const ServiceContent = ({ serviceData }) => {
                             </div>
                         )}
 
-                        {/* Images Secondaires à Droite (Galerie d'images) */}
                         <div className="service-images-right">
                             {secondaryImage1 && (
                                 <div className="service-image-right">
@@ -151,21 +150,15 @@ const ServiceContent = ({ serviceData }) => {
                         </div>
                     </div>
 
-                    {/* 2. Content + Stats Layout (Structure: Contenu riche à gauche, Stats à droite) */}
                     <div className="service-content-with-stats">
-                        
-                        {/* Left Side - Text Content (Le contenu riche) */}
                         <div className="service-content-left">
-                            {/* Le titre principal de la page est déjà rendu en haut, on met le contenu détaillé ici */}
                             <div className="rich-text-content">
                                 {detailedContentBlocks && renderRichText(detailedContentBlocks)}
                             </div>
                         </div>
 
-                        {/* Right Side - Stats Vertical (Indicateurs de Performance) */}
-                        {/* ... (Code de la section Stats inchangé) ... */}
                         <div className="service-content-right">
-                            <h3 className="stats-title">Indicateurs de Performance</h3>
+                            <h3 className="stats-title">{t.statsTitle}</h3>
                             <div className="service-stats">
                                 {indicateurs && indicateurs.map((stat, index) => (
                                     <div key={stat.id || index} className="stat-item">
@@ -187,7 +180,7 @@ const ServiceContent = ({ serviceData }) => {
 
                     {benefices && benefices.length > 0 && (
                         <div className="service-benefits">
-                            <h3 className="benefits-title">Bénéfices et Avantages Clés</h3>
+                            <h3 className="benefits-title">{t.benefitsTitle}</h3>
                             
                             <div className="benefits-list">
                                 {benefices.map((benefit, index) => (
