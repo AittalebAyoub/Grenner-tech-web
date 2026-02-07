@@ -40,7 +40,7 @@ const Partners = () => {
                     logoUrl: getLogoUrl(item.logo), // Utilisation de l'URL absolue du logo
                     website: item.site_web,
                 }));
-
+                console.log("Nombre de partners reçus:", formattedPartners.length);
                 setPartners(formattedPartners);
 
             } catch (err) {

@@ -25,7 +25,7 @@ const Header = () => {
                             <span className="info-divider">|</span>
                             <span className="info-item">
                                 <FaEnvelope className="icon" />
-                                contact.grennertech@gmail.com
+                                contact@greenertech.co
                             </span>
                         </div>
                         
@@ -41,7 +41,7 @@ const Header = () => {
                         <div className="logo">
                             {/* Utiliser Link pour naviguer vers la page d'accueil en cliquant sur le logo */}
                             <Link to="/" onClick={handleLinkClick}>
-                                <img src="/Logo-GT.png" alt="Greenman" />
+                                <img src="/Logo-GT.svg" alt="Greenman" />
                             </Link>
                         </div>
 

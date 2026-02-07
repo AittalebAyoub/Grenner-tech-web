@@ -21,7 +21,7 @@ const Footer = () => {
                         <div className="footer-logo">
                             {/* Utiliser Link pour le logo qui mène à l'accueil */}
                             <Link to="/">
-                                <img src="/Logo-h-white.png" alt="Logo GrennerTech" />
+                                <img src="/Logo-h-white.svg" alt="Logo GrennerTech" />
                             </Link>
                         </div>
                         <p className="footer-description">
@@ -52,7 +52,7 @@ const Footer = () => {
                             </div>
                             <div className="contact-item">
                                 <FaEnvelope className="contact-icon" />
-                                <span>contact.greenertech@gmail.com</span>
+                                <span>contact@greenertech.co</span>
                             </div>
                             <div className="contact-item">
                                 <FaMapMarkerAlt className="contact-icon" />
@@ -67,7 +67,7 @@ const Footer = () => {
             <div className="footer-bottom">
                 <div className="container">
                     <div className="footer-bottom-content">
-                        <p>&copy; All Copyright 2024 by GrennerTech</p>
+                        <p>&copy; All Copyright 2025 by GreenerTech</p>
                         <div className="footer-bottom-links">
                             {/* Les liens de politique peuvent aussi être des liens d'ancre ou de route si vous les avez créés */}
                             <Link to="/#terms">Terms of Use</Link>

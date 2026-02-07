@@ -411,13 +411,12 @@ body {
     background: linear-gradient(to left, var(--white) 0%, rgba(255, 255, 255, 0) 100%);
 }
 
-
 .partners-grid {
     display: flex;
-    white-space: nowrap;
-    animation: scrollLogos 20s linear infinite; /* ACCÉLÉRÉ LE DÉFILEMENT (était 30s) */
-    width: fit-content;
+    animation: scrollLogos 25s linear infinite;
+    width: max-content;
 }
+
 
 .partner-logo {
     display: inline-flex;
@@ -439,12 +438,11 @@ body {
     filter: none;
 }
 
-/* Définition de l'animation de défilement (pas de changement dans les keyframes, seul la durée change) */
 @keyframes scrollLogos {
-    0% {
-        transform: translateX(0%);
+    from {
+        transform: translateX(0);
     }
-    100% {
+    to {
         transform: translateX(-50%);
     }
 }
